@@ -13,4 +13,9 @@ class BranchOffice extends Model
     {
         return $this->hasMany(User::class, 'unitbisnis_code', 'unitbisnis_code');
     }
+
+    public function claimUploads(): HasMany
+    {
+        return $this->hasMany(ClaimUpload::class, 'unitbisnis_code', 'unitbisnis_code');
+    }
 }

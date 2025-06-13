@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(BranchOffice::class, 'unitbisnis_code', 'unitbisnis_code');
     }
+
+    public function claimUploads(): HasMany
+    {
+        return $this->hasMany(ClaimUpload::class, 'user_id', 'id');
+    }
 }

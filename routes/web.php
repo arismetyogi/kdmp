@@ -1,9 +1,9 @@
 <?php
 
+use App\Livewire\Claim\BulkUpload;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
-use App\Models\ClaimUpload;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,7 +13,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
-    Route::get('claim-upload', \App\Livewire\Claim\BulkUpload::class)->name('claim-upload');
+    Route::get('upload-penjamin', BulkUpload::class)->name('claim-upload');
 });
 
 Route::middleware(['auth'])->group(function () {
