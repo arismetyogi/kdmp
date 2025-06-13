@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class ClaimUpload extends Model
+{
+    use SoftDeletes;
+
+    protected $guarded = ['id'];
+
+    public function unitBisnis(): BelongsTo
+    {
+        return $this->belongsTo(BranchOffice::class, 'unitbisnis_code', 'unitbisnis_code');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+}
