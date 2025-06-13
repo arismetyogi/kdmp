@@ -129,6 +129,8 @@ class BulkUpload extends Component
 
         ClaimUpload::where('batch_id', $batch_id)->update($isValid);
 
+        $this->claimFile = null;
+
         return back()->with('success', 'Data Berhasil Diupload !!');
     }
     public function render(): View

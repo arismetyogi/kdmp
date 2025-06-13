@@ -12,9 +12,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind('currency', function ($app) {
-            return new NumberFormatter('id-ID', NumberFormatter::CURRENCY);
-        });
+        //
     }
 
     /**

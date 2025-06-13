@@ -58,7 +58,7 @@
                             <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->format('d-M-Y') }}</x-table.cell>
                             <x-table.cell>{{ short_batch($uploadData->batch_id) }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->unitBisnis->name }}</x-table.cell>
-                            <x-table.cell>{{ app('currency')->formatCurrency($uploadData->total_claims, 'IDR') }}</x-table.cell>
+                            <x-table.cell>{{ currency_format($uploadData->total_claims) }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->user?->name }}</x-table.cell>
                             <x-table.cell>
                                 <flux:dropdown>
