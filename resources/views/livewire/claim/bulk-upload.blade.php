@@ -7,15 +7,15 @@
 
     <div class="bg-muted flex w-full max-h-full flex-col gap-6 items-center">
         <div
-            class="p-4 bg-zinc-50 shadow-xl sm:rounded-lg dark:bg-zinc-700/30 max-w-full justify-center items-center mx-auto">
+            class="p-4 bg-zinc-50 shadow-xl sm:rounded-lg dark:bg-zinc-700/30 w-full justify-center items-center mx-auto">
             <flux:subheading size="lg">{{ __('Upload Data Penjamin') }}</flux:subheading>
             <flux:separator/>
 
-            <form id="uploadClaim" wire:submit="uploadClaim" class="flex flex-col gap-6" enctype="multipart/form-data">
+            <form id="uploadClaim" wire:submit="uploadClaim" class="flex flex-col gap-6 items-start" enctype="multipart/form-data">
                 @csrf
                 <flux:field class="mt-4">
                     <flux:input id="claimFile" name="claimFile" wire:model="claimFile" type="file" accept=".xlsx"/>
-                    <flux:text>Upload File hanya ekstensi *.xlsx</flux:text>
+                    <flux:text class="text-orange-400 dark:text-orange-300">Upload File hanya ekstensi *.xlsx</flux:text>
                     <flux:error name="claimFile"/>
                 </flux:field>
 
