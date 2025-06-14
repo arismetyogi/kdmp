@@ -57,7 +57,7 @@
                             <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->created_at)->format('d-M-Y h:m') }}</x-table.cell>
                             <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->format('d-M-Y') }}</x-table.cell>
                             <x-table.cell>{{ short_batch($uploadData->batch_id) }}</x-table.cell>
-                            <x-table.cell>{{ $uploadData->unitBisnis->name }}</x-table.cell>
+                            <x-table.cell>{{ substr(str()->headline($uploadData->unitBisnis->name), 12,20) }}</x-table.cell>
                             <x-table.cell>{{ currency_format($uploadData->total_claims) }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->user?->name }}</x-table.cell>
                             <x-table.cell>

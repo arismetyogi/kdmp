@@ -25,7 +25,6 @@ class BulkUpload extends Component
 
     public $claimFile = null;
     public $perPage = 10;
-
     public $batchId = null;
 
     #[On('delete-batch')]
