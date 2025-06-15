@@ -8,12 +8,17 @@
     <div class="bg-muted flex w-full max-h-full flex-col gap-6 items-center">
         <div class="p-4 overflow-y-auto bg-zinc-50 shadow-xl sm:rounded-lg dark:bg-zinc-700/30 w-full">
             <div class="grid grid-cols-6 gap-2 mb-4">
-                <flux:select wire:model="">
+                <flux:select wire:model="unitBisnisCode">
                     @foreach(\App\Models\BranchOffice::all() as $branch)
-                        <flux:select.option value="{{ $branch->unitbisnis_code }}">{{ $branch->name }}</flux:select.option>
+                        <flux:select.option
+                            value="{{ $branch->unitbisnis_code }}">{{ $branch->name }}</flux:select.option>
                     @endforeach
                 </flux:select>
-                <flux:input type="date" wire:model=""/>
+                <flux:select wire:model="period">
+                    @foreach($periods as $opt)
+                        <flux:select.option value="$opt">{{ \Carbon\Carbon::parse($opt)->format("Y-M") }}</flux:select.option>
+                    @endforeach
+                </flux:select>
                 <flux:spacer/>
                 <flux:button type="primary" wire:click="filter">Filter</flux:button>
                 <flux:button type="primary" wire:click="export">Export</flux:button>
@@ -27,51 +32,55 @@
                     <option value="50">50</option>
                 </select>
             </div>
-            {{--            <x-table.index id="uploadClaimTable">--}}
-            {{--                <x-slot name="head">--}}
-            {{--                    <x-table.heading sortable>#</x-table.heading>--}}
-            {{--                    <x-table.heading sortable>Waktu</x-table.heading>--}}
-            {{--                    <x-table.heading sortable>Periode</x-table.heading>--}}
-            {{--                    <x-table.heading sortable>Batch</x-table.heading>--}}
-            {{--                    <x-table.heading sortable>Unit Bisnis</x-table.heading>--}}
-            {{--                    <x-table.heading sortable>Total</x-table.heading>--}}
-            {{--                    <x-table.heading sortable>User</x-table.heading>--}}
-            {{--                    <x-table.heading sortable>Action</x-table.heading>--}}
-            {{--                </x-slot>--}}
-            {{--                <x-slot name="body">--}}
-            {{--                    @forelse($claimUploads as $uploadData)--}}
-            {{--                        <x-table.row :even="$loop->even">--}}
-            {{--                            <x-table.cell>{{ $loop->iteration }}</x-table.cell>--}}
-            {{--                            <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->created_at)->format('d-M-Y h:m') }}</x-table.cell>--}}
-            {{--                            <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->format('d-M-Y') }}</x-table.cell>--}}
-            {{--                            <x-table.cell>{{ short_batch($uploadData->batch_id) }}</x-table.cell>--}}
-            {{--                            <x-table.cell>{{ substr(str()->headline($uploadData->unitBisnis->name), 12,20) }}</x-table.cell>--}}
-            {{--                            <x-table.cell>{{ currency_format($uploadData->total_claims) }}</x-table.cell>--}}
-            {{--                            <x-table.cell>{{ $uploadData->user?->name }}</x-table.cell>--}}
-            {{--                            <x-table.cell>--}}
-            {{--                                <flux:dropdown>--}}
-            {{--                                    <flux:button icon-trailing="chevron-down">Action</flux:button>--}}
-            {{--                                    <flux:menu>--}}
-            {{--                                        <flux:menu.heading>Actions</flux:menu.heading>--}}
-            {{--                                        <flux:menu.separator/>--}}
-            {{--                                        <flux:menu.item variant="danger" class="cursor-pointer" icon="trash"--}}
-            {{--                                                        wire:click="$dispatch('delete-batch' , {'batchId': '{{ $uploadData->batch_id }}'})">--}}
-            {{--                                            {{  __('Delete') }}--}}
-            {{--                                        </flux:menu.item>--}}
-            {{--                                    </flux:menu>--}}
-            {{--                                </flux:dropdown>--}}
-            {{--                            </x-table.cell>--}}
-            {{--                        </x-table.row>--}}
-            {{--                    @empty--}}
-            {{--                        <tr>--}}
-            {{--                            <td colspan="10"--}}
-            {{--                                class="text-center py-4 text-zinc-500 bg-zinc-50 dark:bg-zinc-700">There are no data--}}
-            {{--                                found!--}}
-            {{--                            </td>--}}
-            {{--                        </tr>--}}
-            {{--                    @endforelse--}}
-            {{--                </x-slot>--}}
-            {{--            </x-table.index>--}}
+            <x-table.index id="uploadClaimDocsTable">
+                <x-slot name="head">
+                    <x-table.heading sortable>#</x-table.heading>
+                    <x-table.heading sortable>Unit Bisnis</x-table.heading>
+                    <x-table.heading sortable>Debitur</x-table.heading>
+                    <x-table.heading sortable>Periode</x-table.heading>
+                    <x-table.heading sortable>Omset</x-table.heading>
+                    <x-table.heading sortable>Nilai Klaim</x-table.heading>
+                    <x-table.heading sortable>Selisih</x-table.heading>
+                    <x-table.heading sortable>Alasan</x-table.heading>
+                    <x-table.heading sortable>Ket</x-table.heading>
+                    <x-table.heading sortable>Status</x-table.heading>
+                    <x-table.heading sortable>Aksi</x-table.heading>
+                </x-slot>
+                <x-slot name="body">
+                    @forelse($claimUploads as $uploadData)
+                        <x-table.row :even="$loop->even">
+                            <x-table.cell>{{ $loop->iteration }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->branch?->name }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->customer_name }}</x-table.cell>
+                            <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->translatedFormat('F Y') }}</x-table.cell>
+                            <x-table.cell>{{ currency_format($uploadData->total) }}</x-table.cell>
+                            <x-table.cell>{{ currency_format($uploadData->claim?->invoice_value) }}</x-table.cell>
+                            <x-table.cell>{{ currency_format($uploadData->claim?->invoice_value - $uploadData->total) }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->claim?->reason }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->claim?->notes }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->status ? 'Closed' : 'Open' }}</x-table.cell>
+                            <x-table.cell>
+                                @if($uploadData->status)
+                                    <flux:text>Dokumen sudah diupload</flux:text>
+                                @else
+                                    <flux:menu.item variant="danger" class="cursor-pointer" icon="trash"
+                                                    wire:click="$dispatch('delete-batch' , {'batchId': '{{ $uploadData->batch_id }}'})">
+                                        {{  __('Upload Dokumen') }}
+                                    </flux:menu.item>
+                                @endif
+                            </x-table.cell>
+                        </x-table.row>
+                    @empty
+                        <tr>
+                            <td colspan="10"
+                                class="text-center py-4 text-zinc-500 bg-zinc-50 dark:bg-zinc-700">There are no
+                                data
+                                found!
+                            </td>
+                        </tr>
+                    @endforelse
+                </x-slot>
+            </x-table.index>
             <div
                 class="flex flex-wrap items-center justify-between py-4 space-y-4 flex-column md:flex-row md:space-y-0">
                 <div wire:model.live="perPage" class="flex gap-2 items-center">

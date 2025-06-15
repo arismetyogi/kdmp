@@ -27,4 +27,9 @@ class ClaimUpload extends Model
     {
         return $this->hasMany(ClaimDetail::class , 'upload_id', 'id');
     }
+
+    public function claim(): BelongsTo
+    {
+        return $this->belongsTo(Claim::class,'id','upload_id');
+    }
 }
