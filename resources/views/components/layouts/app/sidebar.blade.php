@@ -14,6 +14,7 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                    <flux:navlist.item icon="home" :href="route('claim-document-upload.index')" :current="request()->routeIs('claim-document-upload.index')" wire:navigate>{{ __('Upload Dokumen Klaim') }}</flux:navlist.item>
                     <flux:navlist.item icon="arrow-up-on-square" :href="route('claim-upload')" :current="request()->routeIs('claim-upload')" wire:navigate>{{ __('Upload Template') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
