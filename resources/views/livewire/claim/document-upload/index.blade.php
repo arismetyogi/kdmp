@@ -16,7 +16,7 @@
                 </flux:select>
                 <flux:select wire:model="period">
                     @foreach($periods as $opt)
-                        <flux:select.option value="$opt">{{ \Carbon\Carbon::parse($opt)->format("Y-M") }}</flux:select.option>
+                        <flux:select.option value="{{ $opt }}">{{ \Carbon\Carbon::parse($opt)->format("Y-M") }}</flux:select.option>
                     @endforeach
                 </flux:select>
                 <flux:spacer/>
