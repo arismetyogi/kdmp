@@ -17,8 +17,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
     Route::get('upload-dokumen-klaim', DocumentUpload\Index::class)->name('claim-document-upload.index');
 
-    Route::get('upload-penjamin', BulkUpload::class)->name('claim-upload');
-    Route::get('users', Users\Index::class)->name('users.index');
+    Route::middleware('is_admin:99')->group(function () {
+        Route::get('upload-penjamin', BulkUpload::class)->name('claim-upload');
+        Route::get('users', Users\Index::class)->name('users.index');
+    });
 });
 
 Route::middleware(['auth'])->group(function () {

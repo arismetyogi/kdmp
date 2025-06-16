@@ -59,7 +59,7 @@ class Create extends Component
         $this->unitbisnis_code = $user->unitbisnis_code;
     }
 
-    public function save(): \Illuminate\Http\RedirectResponse
+    public function save()
     {
         $validated = $this->validate();
 

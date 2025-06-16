@@ -31,12 +31,6 @@ class Index extends Component
         $dateArray = [];
     protected $queryString = ['search', 'sortField', 'sortDirection'];
 
-    //    avoid user other than Administrator to access this component/route
-    public function mount()
-    {
-        abort_unless(auth()->user()->role_id === 99, 403);
-    }
-
     public function updatedSearch(): void
     {
         $this->resetPage();

@@ -27,12 +27,6 @@ class BulkUpload extends Component
     public $perPage = 10;
     public $batchId = null;
 
-//    avoid user other than Administrator to access this component/route
-    public function mount()
-    {
-        abort_unless(auth()->user()->role_id === 99, 403);
-    }
-
     #[On('delete-batch')]
     public function deleteUpload($batchId): void
     {
