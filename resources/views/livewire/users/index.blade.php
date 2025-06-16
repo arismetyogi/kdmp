@@ -159,4 +159,5 @@
     </div>
 
     @livewire('users.create')
+    @livewire('delete-modal')
 </section>

@@ -19,10 +19,10 @@
 
             <div class="flex flex-col gap-4 my-8">
 
-                <flux:input label="Name" placeholder="Your name" wire:model.blur="name"/>
+                <flux:input label="Name" placeholder="Your name" wire:model.blur="name" autofocus/>
                 <flux:input label="Username" placeholder="Username" wire:model.blur="username"/>
                 <flux:input label="Email" placeholder="mail@example.com" wire:model.blur="email"/>
-                <flux:select label="Unit Bisnis" wire:model="branch_id" placeholder="Pilih BM">
+                <flux:select label="Unit Bisnis" wire:model="unitbisnis_code" placeholder="Pilih BM">
                     @foreach($branches ?? [] as $branch)
                         <flux:select.option.variants.default
                             value="{{ $branch->unitbisnis_code }}">{{ substr($branch->name,12,20) }}</flux:select.option.variants.default>

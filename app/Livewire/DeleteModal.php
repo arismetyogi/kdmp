@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Flux\Flux;
 use Illuminate\View\View;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class DeleteModal extends Component

@@ -21,7 +21,7 @@ class Create extends Component
         $name,
         $username,
         $email,
-        $branch_id,
+        $unitbisnis_code,
         $password,
         $password_confirmation;
 
@@ -36,9 +36,10 @@ class Create extends Component
             'email'     => ['required', 'min:6', 'email',
                 Rule::unique('users')->ignore($this->user)
             ],
-            'branch_id' => ['nullable', 'numeric', 'exists:branch_offices,unitbisnis_code'],
+            'unitbisnis_code' => ['nullable', 'numeric', 'exists:branch_offices,unitbisnis_code'],
             'password'  => [
                 'nullable',
+                'confirmed:password_confirmation',
                 Password::min(8)
                     ->letters()
                     ->numbers()
@@ -55,7 +56,7 @@ class Create extends Component
         $this->name = $user->name;
         $this->username = $user->username;
         $this->email = $user->email;
-        $this->branch_id = $user->unitbisnis_code;
+        $this->unitbisnis_code = $user->unitbisnis_code;
     }
 
     public function save()
@@ -71,9 +72,6 @@ class Create extends Component
             }
             $user = User::create($validated);
             event(new Registered(($user)));
-
-            $this->userId = $user->id; // Store user ID for Vendor Form
-            return $this->userId;
         } else {
             // Remove password fields if not provided
             if (empty($validated['password'])) {
@@ -84,6 +82,7 @@ class Create extends Component
             $this->user->update($validated);
         }
         $this->reset();
+        Flux::modals()->close();
         return to_route('users.index')->with('success', 'User created.');
     }
 
