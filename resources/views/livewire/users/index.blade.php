@@ -50,7 +50,10 @@
                     <x-table.heading sortable wire:click="sortBy('branch_name')"
                                      :direction="$sortField === 'branch_name' ? $sortDirection : null">Unit
                     </x-table.heading>
-                    <x-table.heading sortable>Role</x-table.heading>
+                    <x-table.heading sortable wire:click="sortBy('role_name')"
+                                     :direction="$sortField === 'role_name' ? $sortDirection : null">
+                        Role
+                    </x-table.heading>
                     <x-table.heading sortable wire:click="sortBy('users.updated_at')"
                                      :direction="$sortField === 'users.updated_at' ? $sortDirection : null">Last Update
                     </x-table.heading>
