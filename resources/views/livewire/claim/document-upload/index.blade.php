@@ -72,7 +72,7 @@
                                         <flux:menu>
                                             <flux:menu.item class="cursor-pointer" icon="document-arrow-up"
                                                             wire:click="$dispatch('upload-docs' , {'batchId': '{{ $uploadData->batch_id }}'})">
-                                                {{  __('Upload Dokumen') }}
+                                                {{ __('Upload Dokumen') }}
                                             </flux:menu.item>
                                         </flux:menu>
                                         @if(isset($uploadData->claim->id))
