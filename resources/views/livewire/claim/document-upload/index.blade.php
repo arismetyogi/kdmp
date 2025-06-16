@@ -11,17 +11,19 @@
                 <flux:select wire:model.live="unitBisnisCode">
                     @foreach(\App\Models\BranchOffice::all() as $branch)
                         <flux:select.option
-                            value="{{ $branch->unitbisnis_code }}">{{ $branch->name }}</flux:select.option>
+                            value="{{ $branch->unitbisnis_code }}">{{ substr(str()->headline($branch->name), 12,20) }}</flux:select.option>
                     @endforeach
                 </flux:select>
                 <flux:select wire:model.live="period">
+                    <flux:select.option selected hidden
+                                        value="">Pilih Periode
+                    </flux:select.option>
                     @foreach($periods as $opt)
                         <flux:select.option
                             value="{{ $opt }}">{{ \Carbon\Carbon::parse($opt)->format("Y-M") }}</flux:select.option>
                     @endforeach
                 </flux:select>
                 <flux:spacer/>
-                <flux:button type="primary" wire:click="filter">Filter</flux:button>
                 <flux:button type="primary" wire:click="export">Export</flux:button>
             </div>
             <div wire:model.live="perPage" class="flex gap-2 items-center">
@@ -50,10 +52,10 @@
                 <x-slot name="body">
                     @forelse($claimUploads as $uploadData)
                         <x-table.row :even="$loop->even">
-                            <x-table.cell>{{ $loop->iteration }}</x-table.cell>
-                            <x-table.cell>{{ $uploadData->branch?->name }}</x-table.cell>
-                            <x-table.cell>{{ $uploadData->customer_name }}</x-table.cell>
-                            <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->translatedFormat('F Y') }}</x-table.cell>
+                            <x-table.cell>{{ $claimUploads->firstItem() + $loop->index }}</x-table.cell>
+                            <x-table.cell>{{ substr(str()->headline($uploadData->branch?->name), 12,20) }}</x-table.cell>
+                            <x-table.cell>{{ str()->headline($uploadData->customer_name) }}</x-table.cell>
+                            <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->translatedFormat('M-Y') }}</x-table.cell>
                             <x-table.cell>{{ currency_format($uploadData->total) }}</x-table.cell>
                             <x-table.cell>{{ currency_format($uploadData->claim?->invoice_value) }}</x-table.cell>
                             <x-table.cell>{{ currency_format($uploadData->claim?->invoice_value - $uploadData->total) }}</x-table.cell>
