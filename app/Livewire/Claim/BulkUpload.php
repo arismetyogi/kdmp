@@ -28,14 +28,14 @@ class BulkUpload extends Component
     public $batchId = null;
 
     #[On('delete-batch')]
-    public function deleteUpload($batchId)
+    public function deleteUpload($batchId): void
     {
         $this->batchId = $batchId;
 
         Flux::modal('delete-upload')->show();
     }
 
-    public function delete()
+    public function delete(): RedirectResponse
     {
         $checkData = ClaimUpload::where('batch_id', $this->batchId)
             ->withCount('claimDetails')
@@ -69,13 +69,13 @@ class BulkUpload extends Component
         $fileExtension = $fileUpload->getClientOriginalExtension();
 
         if ($fileExtension != 'xlsx') {
-            return back()->with('error','Extensi Salah !!');
+            return back()->with('error', 'Extensi Salah !!');
         }
 
         $filePath = $fileUpload->store('claim-uploads/' . date('Y/m'));
 
         if (!$filePath) {
-            return back()->with('error','Upload file gagal !!');
+            return back()->with('error', 'Upload file gagal !!');
         }
 
         $file = Storage::path($filePath);
@@ -90,11 +90,11 @@ class BulkUpload extends Component
 
         $results = [];
 
-        $header = ['customer_name','sheet_value','recipe_value','commercial_value','tax_value','total','unitbisnis_code','period'];
+        $header = ['customer_name', 'sheet_value', 'recipe_value', 'commercial_value', 'tax_value', 'total', 'unitbisnis_code', 'period'];
         $batch_id = 'BATCH-' . now()->format('YmdHis') . '-' . Str::uuid();
 
-        for($row=2; $row<=$totalRows; $row++) {
-            for($col=1; $col<=$totalColumns; $col++) {
+        for ($row = 2; $row <= $totalRows; $row++) {
+            for ($col = 1; $col <= $totalColumns; $col++) {
                 $value = $sheet->getCell([$col, $row])->getFormattedValue();
                 if ($header[$col - 1] === 'period') {
                     // Ubah format tanggal dari DD/MM/YYYY menjadi YYYY-MM-DD
@@ -105,11 +105,11 @@ class BulkUpload extends Component
                         $value = null;
                     }
                 }
-                $results[$row][$header[$col-1]]= $value;
+                $results[$row][$header[$col - 1]] = $value;
             }
         }
         // return $results;
-        foreach($results as $result){
+        foreach ($results as $result) {
 
             ClaimUpload::create([
                 'customer_name' => $result['customer_name'],
@@ -132,11 +132,13 @@ class BulkUpload extends Component
 
         return back()->with('success', 'Data Berhasil Diupload !!');
     }
+
     public function render(): View
     {
-        $claimUploads = ClaimUpload::with(['user', 'unitBisnis'])->select('batch_id', 'user_id', 'unitbisnis_code', 'period', DB::raw('COUNT(*) as total_uploads, SUM(total) as total_claims'))
+        $claimUploads = ClaimUpload::with(['user', 'branch'])
+            ->select('batch_id', 'user_id', 'unitbisnis_code', 'period', DB::raw('COUNT(*) as total_uploads, SUM(total) as total_claims'))
             ->groupBy('batch_id', 'user_id', 'unitbisnis_code', 'period')
-            ->orderBy('id', 'DESC')
+            ->orderBy('batch_id', 'DESC')
             ->paginate($this->perPage);
         return view('livewire.claim.bulk-upload', ['claimUploads' => $claimUploads]);
     }

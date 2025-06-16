@@ -11,11 +11,13 @@
             <flux:subheading size="lg">{{ __('Upload Data Penjamin') }}</flux:subheading>
             <flux:separator/>
 
-            <form id="uploadClaim" wire:submit="uploadClaim" class="flex flex-col gap-6 items-start" enctype="multipart/form-data">
+            <form id="uploadClaim" wire:submit="uploadClaim" class="flex flex-col gap-6 items-start"
+                  enctype="multipart/form-data">
                 @csrf
                 <flux:field class="mt-4">
                     <flux:input id="claimFile" name="claimFile" wire:model="claimFile" type="file" accept=".xlsx"/>
-                    <flux:text class="text-orange-400 dark:text-orange-300">Upload File hanya ekstensi *.xlsx</flux:text>
+                    <flux:text class="text-orange-400 dark:text-orange-300">Upload File hanya ekstensi *.xlsx
+                    </flux:text>
                     <flux:error name="claimFile"/>
                 </flux:field>
 
@@ -57,7 +59,7 @@
                             <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->created_at)->format('d-M-Y h:m') }}</x-table.cell>
                             <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->format('d-M-Y') }}</x-table.cell>
                             <x-table.cell>{{ short_batch($uploadData->batch_id) }}</x-table.cell>
-                            <x-table.cell>{{ substr(str()->headline($uploadData->unitBisnis->name), 12,20) }}</x-table.cell>
+                            <x-table.cell>{{ substr(str()->headline($uploadData->branch->name), 12,20) }}</x-table.cell>
                             <x-table.cell>{{ currency_format($uploadData->total_claims) }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->user?->name }}</x-table.cell>
                             <x-table.cell>
