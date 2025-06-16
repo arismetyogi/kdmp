@@ -22,7 +22,7 @@
                     </flux:select>
                 </div>
                 <flux:button type="primary" wire:click="export" icon="document-arrow-down">Export</flux:button>
-                <flux:button type="primary" wire:click="$dispatch('add-user')" icon="user-plus">New User</flux:button>
+                <flux:button type="primary" wire:click="addUser" icon="user-plus">New User</flux:button>
                 <flux:spacer/>
                 <div class="ml-auto w-96">
                     <flux:input icon="magnifying-glass" placeholder="Search..." wire:model.live.debounce="search"
@@ -66,7 +66,7 @@
                             <x-table.cell>{{ $users->firstItem() + $loop->index }}</x-table.cell>
                             <x-table.cell>
                                 <div class="flex items-center gap-2">
-                                    <flux:avatar circle color="auto"
+                                    <flux:avatar circle color="auto" color:seed="{{ $user->id }}"
                                                  src="{{ $user->avatar }}"
                                                  name="{{ $user->name }}"
                                                  badge badge:circle
@@ -157,4 +157,6 @@
             </div>
         </div>
     </div>
+
+    @livewire('users.create')
 </section>

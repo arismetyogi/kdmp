@@ -4,6 +4,7 @@ namespace App\Livewire\Users;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Flux\Flux;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Livewire\Attributes\On;
@@ -118,6 +119,11 @@ class Index extends Component
             ->toArray();
     }
 
+    public function addUser(): void
+    {
+        Flux::modal('add-user')->show();
+    }
+
     public function delete($id): void
     {
         User::destroy($id);
@@ -150,5 +156,6 @@ class Index extends Component
     public function editUser($id): void
     {
         $this->dispatch('editUser', $id);
+        Flux::modal('add-user')->show();
     }
 }
