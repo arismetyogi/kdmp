@@ -16,6 +16,7 @@ if (!function_exists('currency_format')) {
     function currency_format($amount, $locale = 'id-ID', $currency = 'IDR'): false|string|int
     {
         $formatter = new NumberFormatter($locale, NumberFormatter::CURRENCY);
+        $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, 0);
         return $formatter->formatCurrency($amount, $currency);
     }
 }

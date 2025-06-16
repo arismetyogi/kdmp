@@ -54,11 +54,12 @@
                         <x-table.row :even="$loop->even">
                             <x-table.cell>{{ $claimUploads->firstItem() + $loop->index }}</x-table.cell>
                             <x-table.cell>{{ substr(str()->headline($uploadData->branch?->name), 12,20) }}</x-table.cell>
-                            <x-table.cell>{{ str()->headline($uploadData->customer_name) }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->customer_name }}</x-table.cell>
                             <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->translatedFormat('M-Y') }}</x-table.cell>
                             <x-table.cell>{{ currency_format($uploadData->total) }}</x-table.cell>
                             <x-table.cell>{{ currency_format($uploadData->claim?->invoice_value) }}</x-table.cell>
-                            <x-table.cell>{{ currency_format($uploadData->claim?->invoice_value - $uploadData->total) }}</x-table.cell>
+                            <x-table.cell
+                                class="min-w-full">{{ currency_format($uploadData->claim?->invoice_value - $uploadData->total) }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->claim?->reason }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->claim?->notes }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->status ? 'Closed' : 'Open' }}</x-table.cell>
@@ -66,10 +67,20 @@
                                 @if($uploadData->status)
                                     <flux:text>Dokumen sudah diupload</flux:text>
                                 @else
-                                    <flux:menu.item variant="danger" class="cursor-pointer" icon="trash"
-                                                    wire:click="$dispatch('delete-batch' , {'batchId': '{{ $uploadData->batch_id }}'})">
-                                        {{  __('Upload Dokumen') }}
-                                    </flux:menu.item>
+                                    <flux:dropdown>
+                                        <flux:button icon-trailing="chevron-down">Action</flux:button>
+                                        <flux:menu>
+                                            <flux:menu.item class="cursor-pointer" icon="document-arrow-up"
+                                                            wire:click="$dispatch('upload-docs' , {'batchId': '{{ $uploadData->batch_id }}'})">
+                                                {{  __('Upload Dokumen') }}
+                                            </flux:menu.item>
+                                        </flux:menu>
+                                        @if(isset($uploadData->claim->id))
+                                            <flux:menu.item icon="question-mark-circle">
+                                                Alasan Selisih
+                                            </flux:menu.item>
+                                        @endif
+                                    </flux:dropdown>
                                 @endif
                             </x-table.cell>
                         </x-table.row>
