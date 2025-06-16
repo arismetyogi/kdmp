@@ -86,7 +86,7 @@
                         </x-table.row>
                     @empty
                         <tr>
-                            <td colspan="10"
+                            <td colspan="15"
                                 class="text-center py-4 text-zinc-500 bg-zinc-50 dark:bg-zinc-700">There are no
                                 data
                                 found!
