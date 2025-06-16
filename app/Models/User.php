@@ -64,7 +64,7 @@ class User extends Authenticatable
             ->implode('');
     }
 
-    public function branchOffice(): BelongsTo
+    public function branch(): BelongsTo
     {
         return $this->belongsTo(BranchOffice::class, 'unitbisnis_code', 'unitbisnis_code');
     }
