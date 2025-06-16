@@ -76,7 +76,7 @@
                                                                 wire:click="$dispatch('upload-docs' , {'batchId': '{{ $uploadData->batch_id }}'})">
                                                     {{ __('Upload Dokumen') }}
                                                 </flux:menu.item>
-                                                @if(isset($uploadData->claim->id))
+                                                @if(isset($uploadData->claim->id) && ($uploadData->claim?->invoice_value - $uploadData->total) != 0)
                                                     <flux:menu.item icon="question-mark-circle">
                                                         Alasan Selisih
                                                     </flux:menu.item>
