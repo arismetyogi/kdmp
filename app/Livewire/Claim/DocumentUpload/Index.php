@@ -51,9 +51,11 @@ class Index extends Component
 
     public function getBranchOfficeProperty()
     {
-        return BranchOffice::when($this->userUBCode !== 3000, function ($query) {
-            $query->where('unitbisnis_code', $this->userUBCode);
-        })->get();
+        if ($this->userUBCode == 3000) {
+            return BranchOffice::all();
+        } else {
+            return BranchOffice::where('unitbisnis_code', $this->userUBCode)->get();
+        }
     }
 
     public function render(): View

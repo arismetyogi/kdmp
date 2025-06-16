@@ -19,14 +19,15 @@
             <flux:navlist.item icon="document-arrow-up" :href="route('claim-document-upload.index')"
                                :current="request()->routeIs('claim-document-upload.index')"
                                wire:navigate>{{ __('Upload Dokumen Klaim') }}</flux:navlist.item>
-            <flux:navlist.item icon="arrow-up-on-square" :href="route('claim-upload')"
-                               :current="request()->routeIs('claim-upload')"
-                               wire:navigate>{{ __('Upload Template') }}</flux:navlist.item>
-            <flux:navmenu.separator/>
-            <flux:navlist.item icon="users" :href="route('users.index')"
-                               :current="request()->routeIs('users.index')"
-                               wire:navigate>{{ __('Data User') }}</flux:navlist.item>
-
+            @if(auth()->user()->role_id === 99)
+                <flux:navlist.item icon="arrow-up-on-square" :href="route('claim-upload')"
+                                   :current="request()->routeIs('claim-upload')"
+                                   wire:navigate>{{ __('Upload Template') }}</flux:navlist.item>
+                <flux:navmenu.separator/>
+                <flux:navlist.item icon="users" :href="route('users.index')"
+                                   :current="request()->routeIs('users.index')"
+                                   wire:navigate>{{ __('Data User') }}</flux:navlist.item>
+            @endif
         </flux:navlist.group>
     </flux:navlist>
 

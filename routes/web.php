@@ -15,9 +15,9 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
-    Route::get('upload-penjamin', BulkUpload::class)->name('claim-upload');
     Route::get('upload-dokumen-klaim', DocumentUpload\Index::class)->name('claim-document-upload.index');
 
+    Route::get('upload-penjamin', BulkUpload::class)->name('claim-upload');
     Route::get('users', Users\Index::class)->name('users.index');
 });
 
@@ -29,4 +29,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

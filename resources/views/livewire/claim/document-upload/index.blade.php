@@ -9,7 +9,7 @@
         <div class="p-4 overflow-y-auto bg-zinc-50 shadow-xl sm:rounded-lg dark:bg-zinc-700/30 w-full">
             <div class="grid grid-cols-6 gap-2 mb-4">
                 <flux:select wire:model.live="unitBisnisCode">
-                    @foreach(\App\Models\BranchOffice::all() as $branch)
+                    @foreach($branchOffice as $branch)
                         <flux:select.option
                             value="{{ $branch->unitbisnis_code }}">{{ substr(str()->headline($branch->name), 12,20) }}</flux:select.option>
                     @endforeach
@@ -47,7 +47,7 @@
                     <x-table.heading sortable>Alasan</x-table.heading>
                     <x-table.heading sortable>Ket</x-table.heading>
                     <x-table.heading sortable>Status</x-table.heading>
-                    <x-table.heading sortable>Aksi</x-table.heading>
+                    <x-table.heading sortable></x-table.heading>
                 </x-slot>
                 <x-slot name="body">
                     @forelse($claimUploads as $uploadData)
@@ -70,16 +70,19 @@
                                     <flux:dropdown>
                                         <flux:button icon-trailing="chevron-down">Action</flux:button>
                                         <flux:menu>
-                                            <flux:menu.item class="cursor-pointer" icon="document-arrow-up"
-                                                            wire:click="$dispatch('upload-docs' , {'batchId': '{{ $uploadData->batch_id }}'})">
-                                                {{ __('Upload Dokumen') }}
-                                            </flux:menu.item>
+                                            <flux:menu.group>
+
+                                                <flux:menu.item class="cursor-pointer" icon="document-arrow-up"
+                                                                wire:click="$dispatch('upload-docs' , {'batchId': '{{ $uploadData->batch_id }}'})">
+                                                    {{ __('Upload Dokumen') }}
+                                                </flux:menu.item>
+                                                @if(isset($uploadData->claim->id))
+                                                    <flux:menu.item icon="question-mark-circle">
+                                                        Alasan Selisih
+                                                    </flux:menu.item>
+                                                @endif
+                                            </flux:menu.group>
                                         </flux:menu>
-                                        @if(isset($uploadData->claim->id))
-                                            <flux:menu.item icon="question-mark-circle">
-                                                Alasan Selisih
-                                            </flux:menu.item>
-                                        @endif
                                     </flux:dropdown>
                                 @endif
                             </x-table.cell>

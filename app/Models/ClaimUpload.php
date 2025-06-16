@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ClaimUpload extends Model
@@ -28,8 +29,8 @@ class ClaimUpload extends Model
         return $this->hasMany(ClaimDetail::class, 'upload_id', 'id');
     }
 
-    public function claim(): BelongsTo
+    public function claim(): HasOne
     {
-        return $this->belongsTo(Claim::class, 'id', 'upload_id');
+        return $this->hasOne(Claim::class, 'upload_id', 'id');
     }
 }
