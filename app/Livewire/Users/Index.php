@@ -11,6 +11,7 @@ use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+#[On('users-updated')]
 class Index extends Component
 {
     use WithPagination;
@@ -128,7 +129,7 @@ class Index extends Component
     public function delete($id): void
     {
         User::destroy($id);
-        $this->dispatch('refresh-users-table');
+        $this->dispatch('users-updated');
     }
 
     public function getCheckedIdsProperty(): string
@@ -158,5 +159,11 @@ class Index extends Component
     {
         $this->dispatch('editUser', $id);
         Flux::modal('add-user')->show();
+    }
+
+    public function editRole($id): void
+    {
+        $this->dispatch('editRole', $id);
+        Flux::modal('edit-role')->show();
     }
 }

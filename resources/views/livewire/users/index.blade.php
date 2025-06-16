@@ -100,7 +100,7 @@
                                         </flux:modal.trigger>
 
                                         <flux:modal.trigger name="edit-roles"
-                                                            wire:click="$dispatch('loadUser', { id: {{ $user->id }} })">
+                                                            wire:click="editRole({{ $user->id }})">
                                             <flux:menu.item icon="academic-cap" class="cursor-pointer">Update Role
                                             </flux:menu.item>
                                         </flux:modal.trigger>
@@ -136,8 +136,7 @@
                     @empty
                         <tr>
                             <td colspan="10" class="text-center py-4 text-zinc-500 bg-zinc-50 dark:bg-zinc-700">There
-                                are no
-                                users with that name!
+                                are no users with that name!
                             </td>
                         </tr>
                     @endforelse
@@ -162,5 +161,6 @@
     </div>
 
     @livewire('users.create')
+    @livewire('users.update-role')
     @livewire('delete-modal')
 </section>

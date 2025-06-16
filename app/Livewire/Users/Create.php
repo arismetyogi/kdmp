@@ -59,7 +59,7 @@ class Create extends Component
         $this->unitbisnis_code = $user->unitbisnis_code;
     }
 
-    public function save()
+    public function save(): \Illuminate\Http\RedirectResponse
     {
         $validated = $this->validate();
 
@@ -82,6 +82,8 @@ class Create extends Component
             $this->user->update($validated);
         }
         $this->reset();
+
+        $this->dispatch('users-updated');
         Flux::modals()->close();
         return to_route('users.index')->with('success', 'User created.');
     }
