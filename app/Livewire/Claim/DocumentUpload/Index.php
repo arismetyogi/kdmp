@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Claim\DocumentUpload;
 
-use AllowDynamicProperties;
 use App\Models\BranchOffice;
 use App\Models\ClaimUpload;
 use Carbon\Carbon;
@@ -10,7 +9,7 @@ use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[AllowDynamicProperties] class Index extends Component
+class Index extends Component
 {
     use WithPagination;
 

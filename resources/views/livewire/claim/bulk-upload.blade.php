@@ -57,7 +57,7 @@
                         <x-table.row :even="$loop->even">
                             <x-table.cell>{{ $loop->iteration }}</x-table.cell>
                             <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->created_at)->format('d-M-Y h:m') }}</x-table.cell>
-                            <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->format('d-M-Y') }}</x-table.cell>
+                            <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->format('M-Y') }}</x-table.cell>
                             <x-table.cell>{{ short_batch($uploadData->batch_id) }}</x-table.cell>
                             <x-table.cell>{{ substr(str()->headline($uploadData->branch->name), 12,20) }}</x-table.cell>
                             <x-table.cell>{{ currency_format($uploadData->total_claims) }}</x-table.cell>
