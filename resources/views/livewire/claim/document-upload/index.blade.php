@@ -8,15 +8,16 @@
     <div class="bg-muted flex w-full max-h-full flex-col gap-6 items-center">
         <div class="p-4 overflow-y-auto bg-zinc-50 shadow-xl sm:rounded-lg dark:bg-zinc-700/30 w-full">
             <div class="grid grid-cols-6 gap-2 mb-4">
-                <flux:select wire:model="unitBisnisCode">
+                <flux:select wire:model.live="unitBisnisCode">
                     @foreach(\App\Models\BranchOffice::all() as $branch)
                         <flux:select.option
                             value="{{ $branch->unitbisnis_code }}">{{ $branch->name }}</flux:select.option>
                     @endforeach
                 </flux:select>
-                <flux:select wire:model="period">
+                <flux:select wire:model.live="period">
                     @foreach($periods as $opt)
-                        <flux:select.option value="{{ $opt }}">{{ \Carbon\Carbon::parse($opt)->format("Y-M") }}</flux:select.option>
+                        <flux:select.option
+                            value="{{ $opt }}">{{ \Carbon\Carbon::parse($opt)->format("Y-M") }}</flux:select.option>
                     @endforeach
                 </flux:select>
                 <flux:spacer/>
@@ -93,7 +94,7 @@
                     </select>
                 </div>
                 <div>
-                    {{--                    {{ $claimUploads->links('simple-pagination', data: ['scrollTo' => false]) }}--}}
+                    {{ $claimUploads->links('simple-pagination', data: ['scrollTo' => false]) }}
                 </div>
             </div>
         </div>

@@ -6,15 +6,17 @@ use AllowDynamicProperties;
 use App\Models\BranchOffice;
 use App\Models\ClaimUpload;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Livewire\Component;
-use phpDocumentor\Reflection\Types\This;
+use Livewire\WithPagination;
 
 #[AllowDynamicProperties] class Index extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
     public $userUBCode;
-    public $unitBisnisCode;
+    public ?string $unitBisnisCode = null;
     public $periods;
     public $period;
 
@@ -24,41 +26,28 @@ use phpDocumentor\Reflection\Types\This;
         $this->periods = ClaimUpload::query()->distinct()->pluck('period');
     }
 
-    public function getClaimUploadsQuery()
+    public function getClaimUploadsQueryProperty()
     {
-        $period = Carbon::parse($this->period);
-        $bulan = $period->month;
-        $tahun = $period->year;
+        $period = Carbon::parse($this->period ?? now());
 
-        $uploads = ClaimUpload::query()
-            ->where('unitbisnis_code', $this->unitBisnisCode)
-//            ->when(DB::getDriverName() === 'sqlite', function ($query) use ($bulan, $tahun) {
-//                $query->whereRaw("strftime('%m', period) = ?", [str_pad($bulan, 2, '0', STR_PAD_LEFT)])
-//                    ->whereRaw("strftime('%Y', period) = ?", [$tahun]);
-//            })
-//            ->when(DB::getDriverName() !== 'sqlite', function ($query) use ($bulan, $tahun) {
-//                $query->whereRaw("MONTH(period) = ?", [$bulan])
-//                    ->whereRaw("YEAR(period) = ?", [$tahun]);
-//            })
-            ->get();
-        $this->claimUploads = $uploads;
-        return $this->claimUploads;
-    }
+        $startDate = $period->copy()->startOfMonth();
+        $endDate = $period->copy()->endOfMonth();
 
-    public function filter(): void
-    {
-        $this->getClaimUploadsQuery();
+        $query = ClaimUpload::with('branch')
+            ->whereBetween('period', [$startDate, $endDate])
+            ->latest();
+
+        if ($this->userUBCode != 3000) {
+            $query->where('unitbisnis_code', $this->userUBCode);
+        } else {
+            $query->where('unitbisnis_code', $this->unitBisnisCode);
+        }
+        return $query;
     }
 
     public function getClaimUploadsProperty()
     {
-        return ClaimUpload::when($this->userUBCode !== 3000, function ($query) {
-            $query->where('unitbisnis_code', $this->userUBCode);
-        })
-            ->whereMonth('period', now()->month)
-            ->whereYear('period', now()->year)
-            ->latest()
-            ->get();
+        return $this->claimUploadsQuery->paginate($this->perPage);
     }
 
     public function getBranchOfficeProperty()

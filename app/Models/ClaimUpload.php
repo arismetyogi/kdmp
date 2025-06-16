@@ -13,7 +13,7 @@ class ClaimUpload extends Model
 
     protected $guarded = ['id'];
 
-    public function unitBisnis(): BelongsTo
+    public function branch(): BelongsTo
     {
         return $this->belongsTo(BranchOffice::class, 'unitbisnis_code', 'unitbisnis_code');
     }
@@ -25,11 +25,11 @@ class ClaimUpload extends Model
 
     public function claimDetails(): HasMany
     {
-        return $this->hasMany(ClaimDetail::class , 'upload_id', 'id');
+        return $this->hasMany(ClaimDetail::class, 'upload_id', 'id');
     }
 
     public function claim(): BelongsTo
     {
-        return $this->belongsTo(Claim::class,'id','upload_id');
+        return $this->belongsTo(Claim::class, 'id', 'upload_id');
     }
 }

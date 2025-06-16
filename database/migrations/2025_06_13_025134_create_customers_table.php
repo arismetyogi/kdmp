@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -19,9 +18,9 @@ return new class extends Migration
             $table->string('area_code')->nullable();
             $table->string('area_code_description')->nullable();
             $table->string('customer_name')->nullable();
-            $table->smallInteger('insurer_id')->nullable();
-            $table->smallInteger('deleted_by')->nullable();
-            $table->smallInteger('updated_by')->nullable();
+            $table->integer('insurer_id')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->foreignId('user_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
