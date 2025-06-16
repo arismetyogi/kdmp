@@ -5,6 +5,7 @@ use App\Livewire\Claim\DocumentUpload;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
+use App\Livewire\Users;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -12,10 +13,12 @@ Route::get('/', function () {
 })->name('home');
 
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
     Route::get('upload-penjamin', BulkUpload::class)->name('claim-upload');
     Route::get('upload-dokumen-klaim', DocumentUpload\Index::class)->name('claim-document-upload.index');
+
+    Route::get('users', Users\Index::class)->name('users.index');
 });
 
 Route::middleware(['auth'])->group(function () {
