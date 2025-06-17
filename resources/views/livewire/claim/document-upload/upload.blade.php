@@ -7,10 +7,10 @@
 
     <div class="bg-muted flex w-full max-h-full flex-col gap-6 items-center">
         <div class="p-4 overflow-y-auto bg-zinc-50 shadow-xl sm:rounded-lg dark:bg-zinc-700/30 w-full">
-            <div class=" gap-6 mb-4 w-full">
+            <div class=" gap-6 mb-4 w-full drop-shadow-md">
                 <form wire:submit="save">
-                    <flux:heading size="lg" class="text-start">Lengkapi data klaim berikut</flux:heading>
-
+                    <flux:heading size="lg" class="text-start">Lengkapi data dokumen klaim berikut</flux:heading>
+                    <flux:separator/>
                     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 my-8">
                         <flux:input disabled label="Debitur" value="{{ $claimUpload->customer_name }}"/>
                         <flux:input label="Nomor Invoice" wire:model="invoice_number" name="invoice_number"/>
@@ -52,9 +52,7 @@
                 </form>
             </div>
 
-            <flux:spacer/>
             <flux:separator/>
-            <flux:spacer/>
 
             <div class="mt-4">
                 <x-table.index id="uploadClaimDocsTable">

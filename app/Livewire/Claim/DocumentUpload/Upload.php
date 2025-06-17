@@ -6,10 +6,13 @@ use App\Models\ClaimDetail;
 use App\Models\ClaimUpload;
 use Crypt;
 use Illuminate\View\View;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
-
+use Livewire\WithFileUploads;
+#[Layout('components.layouts.app')]
 class Upload extends Component
 {
+    use WithFileUploads;
     public $id;
     public ClaimUpload $claimUpload;
     public $claimDetail;
@@ -24,8 +27,31 @@ class Upload extends Component
     {
         $this->id = Crypt::decryptString($id);
         $this->claimUpload = ClaimUpload::find($this->id);
+        $this->updated_by = auth()->user()->id;
+        $this->unitbisnis_code = $this->claimUpload->unitbisnis_code;
+        $this->customer_id = $this->claimUpload->customer_name;
     }
 
+    public function rules()
+    {
+        return [
+            'upload_id' => 'required',
+            'invoice_number' => 'required|string',
+            'invoice_value' => 'required|numeric|min:0',
+            'delivery_date' => 'required|date',
+            'upload_invoice_file' => 'sometimes|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'receipt_file' => 'sometimes|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'tax_invoice_file' => 'sometimes|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'invoice_date' => 'required|date',
+            'po_customer_file' => 'sometimes|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'receipt_order_file' => 'sometimes|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'customer_tracking_number' => 'required|string',
+            'updated_by' => 'required|string',
+            'customer_id' => 'required|integer',
+            'period' => 'required|string',
+            'unitbisnis_code' => 'required|string',
+        ];
+    }
     public function save()
     {
         //
