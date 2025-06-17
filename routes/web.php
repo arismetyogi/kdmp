@@ -16,6 +16,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
     Route::get('upload-dokumen-klaim', DocumentUpload\Index::class)->name('claim-document-upload.index');
+    Route::get('upload-dokumen-klaim/{id}', DocumentUpload\Index::class)->name('claim-document-upload.upload');
 
     Route::middleware('is_admin:99')->group(function () {
         Route::get('upload-penjamin', BulkUpload::class)->name('claim-upload');

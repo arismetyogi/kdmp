@@ -7,22 +7,24 @@
 
     <div class="bg-muted flex w-full max-h-full flex-col gap-6 items-center">
         <div class="p-4 overflow-y-auto bg-zinc-50 shadow-xl sm:rounded-lg dark:bg-zinc-700/30 w-full">
-            <div class="grid grid-cols-6 gap-2 mb-4">
-                <flux:select wire:model.live="unitBisnisCode">
-                    @foreach($branchOffice as $branch)
-                        <flux:select.option
-                            value="{{ $branch->unitbisnis_code }}">{{ substr(str()->headline($branch->name), 12,20) }}</flux:select.option>
-                    @endforeach
-                </flux:select>
-                <flux:select wire:model.live="period">
-                    <flux:select.option selected hidden
-                                        value="">Pilih Periode
-                    </flux:select.option>
-                    @foreach($periods as $opt)
-                        <flux:select.option
-                            value="{{ $opt }}">{{ \Carbon\Carbon::parse($opt)->format("Y-M") }}</flux:select.option>
-                    @endforeach
-                </flux:select>
+            <div class="flex justify-around gap-2 mb-4">
+                <div class="flex w-96 gap-3">
+                    <flux:select wire:model.live="unitBisnisCode" :disabled="(auth()->user()->role_id != 99)">
+                        @foreach($branchOffice as $branch)
+                            <flux:select.option
+                                value="{{ $branch->unitbisnis_code }}">{{ substr(str()->headline($branch->name), 12,20) }}</flux:select.option>
+                        @endforeach
+                    </flux:select>
+                    <flux:select wire:model.live="period">
+                        <flux:select.option selected hidden
+                                            value="">Pilih Periode
+                        </flux:select.option>
+                        @foreach($periods as $opt)
+                            <flux:select.option
+                                value="{{ $opt }}">{{ \Carbon\Carbon::parse($opt)->format("Y-M") }}</flux:select.option>
+                        @endforeach
+                    </flux:select>
+                </div>
                 <flux:spacer/>
                 <flux:button type="primary" wire:click="export">Export</flux:button>
             </div>
@@ -59,7 +61,8 @@
                                     <flux:tooltip.index>
                                         {{ substr($uploadData->customer_name, 0, 25) }}...
                                     </flux:tooltip.index>
-                                    <flux:tooltip.content class="bg-accent-content">{{ $uploadData->customer_name }}</flux:tooltip.content>
+                                    <flux:tooltip.content
+                                        class="bg-accent-content">{{ $uploadData->customer_name }}</flux:tooltip.content>
                                 </flux:tooltip>
                             </x-table.cell>
                             <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->translatedFormat('M-Y') }}</x-table.cell>
@@ -79,9 +82,8 @@
                                         </flux:button>
                                         <flux:menu>
                                             <flux:menu.group>
-
                                                 <flux:menu.item class="cursor-pointer" icon="document-arrow-up"
-                                                                wire:click="$dispatch('upload-docs' , {'batchId': '{{ $uploadData->batch_id }}'})">
+                                                                href="{{ route('claim-document-upload.upload', ['id' => $uploadData->id]) }}">
                                                     {{ __('Upload Dokumen') }}
                                                 </flux:menu.item>
                                                 @if(isset($uploadData->claim->id) && ($uploadData->claim?->invoice_value - $uploadData->total) != 0)

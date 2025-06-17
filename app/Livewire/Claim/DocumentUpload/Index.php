@@ -22,7 +22,7 @@ class Index extends Component
     public function mount(): void
     {
         $this->userUBCode = auth()->user()->unitbisnis_code;
-        $this->periods = ClaimUpload::query()->distinct()->pluck('period');
+        $this->periods = ClaimUpload::select('period')->distinct()->pluck('period');
     }
 
     public function getClaimUploadsQueryProperty()
