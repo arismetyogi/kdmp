@@ -7,7 +7,6 @@ use App\Models\ClaimUpload;
 use Crypt;
 use Illuminate\View\View;
 use Livewire\Component;
-use function Pest\Laravel\get;
 
 class Upload extends Component
 {
@@ -20,6 +19,7 @@ class Upload extends Component
 
     // claim - recap
     public $customer_id, $value, $period, $unitbisnis_code;
+
     public function mount($id): void
     {
         $this->id = Crypt::decryptString($id);
@@ -34,7 +34,7 @@ class Upload extends Component
     public function render(): View
     {
         $this->claimDetail = ClaimDetail::where('upload_id', '=', '$this->id')->get();
-        return view('livewire.claim.document-upload.upload', ['$this->claimDetail' => $this->claimDetail]);
+        return view('livewire.claim.document-upload.upload', ['claimDetails' => $this->claimDetail]);
     }
 
     public function resetForm()

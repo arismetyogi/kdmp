@@ -69,6 +69,38 @@
                         <x-table.heading sortable></x-table.heading>
                     </x-slot>
                     <x-slot name="body">
+                        @forelse($claimDetails as $claim)
+                            <x-table.row :even="$loop->even">
+                                <x-table.cell>{{ $loop->iteration }}</x-table.cell>
+                                <x-table.cell>{{ $claim->invoice_number }}</x-table.cell>
+                                <x-table.cell>{{ $claim->delivery_date }}</x-table.cell>
+                                <x-table.cell>
+                                    @isset($claim->upload_invoice_file)
+                                        <flux:menu.item href="#" target="_blank">File sudah diupload</flux:menu.item>
+                                    @endisset
+                                    <flux:button>Upload</flux:button>
+                                </x-table.cell>
+                                <x-table.cell>
+                                    @isset($claim->receipt_file)
+                                        <flux:menu.item href="#" target="_blank">File sudah diupload</flux:menu.item>
+                                    @endisset
+                                    <flux:button>Upload</flux:button>
+                                </x-table.cell>
+                                <x-table.cell>
+                                    @isset($claim->tax_invoice_file)
+                                        <flux:menu.item href="#" target="_blank">File sudah diupload</flux:menu.item>
+                                    @endisset
+                                    <flux:button>Upload</flux:button>
+                                </x-table.cell>
+                            </x-table.row>
+                        @empty
+                            <tr>
+                                <td colspan="15"
+                                    class="text-center py-4 text-zinc-500 bg-zinc-50 dark:bg-zinc-700">There are no
+                                    data found!
+                                </td>
+                            </tr>
+                        @endforelse
                     </x-slot>
                 </x-table.index>
             </div>
