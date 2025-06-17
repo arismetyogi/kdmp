@@ -53,8 +53,15 @@
                     @forelse($claimUploads as $uploadData)
                         <x-table.row :even="$loop->even">
                             <x-table.cell>{{ $claimUploads->firstItem() + $loop->index }}</x-table.cell>
-                            <x-table.cell>{{ substr(str()->headline($uploadData->branch?->name), 12,20) }}</x-table.cell>
-                            <x-table.cell>{{ $uploadData->customer_name }}</x-table.cell>
+                            <x-table.cell>{{ substr(str()->headline($uploadData->branch?->name), 12, 20) }}</x-table.cell>
+                            <x-table.cell>
+                                <flux:tooltip>
+                                    <flux:tooltip.index>
+                                        {{ substr($uploadData->customer_name, 0, 25) }}...
+                                    </flux:tooltip.index>
+                                    <flux:tooltip.content class="bg-accent-content">{{ $uploadData->customer_name }}</flux:tooltip.content>
+                                </flux:tooltip>
+                            </x-table.cell>
                             <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->translatedFormat('M-Y') }}</x-table.cell>
                             <x-table.cell>{{ currency_format($uploadData->total) }}</x-table.cell>
                             <x-table.cell>{{ currency_format($uploadData->claim?->invoice_value) }}</x-table.cell>
@@ -64,11 +71,12 @@
                             <x-table.cell>{{ $uploadData->claim?->notes }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->status ? 'Closed' : 'Open' }}</x-table.cell>
                             <x-table.cell>
-                                @if($uploadData->status)
+                                @if($uploadData->claim?->id && ($uploadData->claim?->invoice_value - $uploadData->total) == 0)
                                     <flux:text>Dokumen sudah diupload</flux:text>
                                 @else
                                     <flux:dropdown>
-                                        <flux:button icon-trailing="chevron-down">Action</flux:button>
+                                        <flux:button size="xs" variant="filled" icon-trailing="chevron-down">Action
+                                        </flux:button>
                                         <flux:menu>
                                             <flux:menu.group>
 
