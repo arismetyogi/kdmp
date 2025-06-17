@@ -11,9 +11,7 @@
         </tbody>
 
         <tfoot class="text-base">
-        <tr>
-            {{ $foot }}
-        </tr>
+        {{ $slot }}
         </tfoot>
     </table>
 </div>
