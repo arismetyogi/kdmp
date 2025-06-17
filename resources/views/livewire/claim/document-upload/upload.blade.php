@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="flex gap-2">
-                        <flux:button href="{{ route('claim-document-upload.index') }}"
+                        <flux:button icon="arrow-uturn-left" href="{{ route('claim-document-upload.index') }}"
                                      variant="filled">{{ __('Cancel') }}</flux:button>
 
                         <flux:button type="submit" variant="primary">
@@ -50,6 +50,27 @@
                         </flux:button>
                     </div>
                 </form>
+            </div>
+
+            <flux:spacer/>
+            <flux:separator/>
+            <flux:spacer/>
+
+            <div class="mt-4">
+                <x-table.index id="uploadClaimDocsTable">
+                    <x-slot name="head">
+                        <x-table.heading sortable>#</x-table.heading>
+                        <x-table.heading sortable>No Invoice</x-table.heading>
+                        <x-table.heading sortable>Nilai Invoice</x-table.heading>
+                        <x-table.heading sortable>Tgl Kirim</x-table.heading>
+                        <x-table.heading sortable>File Invoice</x-table.heading>
+                        <x-table.heading sortable>Bukti Kirim</x-table.heading>
+                        <x-table.heading sortable>Faktur Pajak</x-table.heading>
+                        <x-table.heading sortable></x-table.heading>
+                    </x-slot>
+                    <x-slot name="body">
+                    </x-slot>
+                </x-table.index>
             </div>
         </div>
     </div>
