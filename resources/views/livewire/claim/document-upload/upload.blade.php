@@ -67,10 +67,14 @@
                         <x-table.heading sortable></x-table.heading>
                     </x-slot>
                     <x-slot name="body">
+                        @php
+                            $totalInvoiceValue = 0;
+                        @endphp
                         @forelse($claimDetails as $claim)
                             <x-table.row :even="$loop->even">
                                 <x-table.cell>{{ $loop->iteration }}</x-table.cell>
                                 <x-table.cell>{{ $claim->invoice_number }}</x-table.cell>
+                                <x-table.cell class="text-end">{{ currency_format($claim->invoice_value) }}</x-table.cell>
                                 <x-table.cell>{{ $claim->delivery_date }}</x-table.cell>
                                 <x-table.cell>
                                     @isset($claim->upload_invoice_file)
@@ -99,6 +103,17 @@
                                 </td>
                             </tr>
                         @endforelse
+
+                        @php
+                            $totalInvoiceValue += $claim->invoice_value;
+                        @endphp
+                    </x-slot>
+                    <x-slot name="foot">
+                        <th colspan="2" class="text-end">Total</th>
+                        <th class="text-end">{{ currency_format($totalInvoiceValue) }}</th>
+                        <x-table.cell>Total Omset</x-table.cell>
+                        <th>{{ currency_format($claimUpload->total) }}</th>
+                        <th colspan="3"></th>
                     </x-slot>
                 </x-table.index>
             </div>

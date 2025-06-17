@@ -74,27 +74,23 @@
                             <x-table.cell>{{ $uploadData->claim?->notes }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->status ? 'Closed' : 'Open' }}</x-table.cell>
                             <x-table.cell>
-                                @if($uploadData->claim?->id && ($uploadData->claim?->invoice_value - $uploadData->total) == 0)
-                                    <flux:text>Dokumen sudah diupload</flux:text>
-                                @else
-                                    <flux:dropdown>
-                                        <flux:button size="xs" variant="filled" icon-trailing="chevron-down">Action
-                                        </flux:button>
-                                        <flux:menu>
-                                            <flux:menu.group>
-                                                <flux:menu.item class="cursor-pointer" icon="document-arrow-up"
-                                                                href="{{ route('claim-document-upload.upload', ['id' => Crypt::encryptString($uploadData->id)]) }}">
-                                                    {{ __('Upload Dokumen') }}
+                                <flux:dropdown>
+                                    <flux:button size="xs" variant="filled" icon-trailing="chevron-down">Action
+                                    </flux:button>
+                                    <flux:menu>
+                                        <flux:menu.group>
+                                            <flux:menu.item class="cursor-pointer" icon="document-arrow-up"
+                                                            href="{{ route('claim-document-upload.upload', ['id' => Crypt::encryptString($uploadData->id)]) }}">
+                                                {{ __('Upload Dokumen') }}
+                                            </flux:menu.item>
+                                            @if(isset($uploadData->claim->id) && ($uploadData->claim?->invoice_value - $uploadData->total) != 0)
+                                                <flux:menu.item icon="question-mark-circle">
+                                                    Alasan Selisih
                                                 </flux:menu.item>
-                                                @if(isset($uploadData->claim->id) && ($uploadData->claim?->invoice_value - $uploadData->total) != 0)
-                                                    <flux:menu.item icon="question-mark-circle">
-                                                        Alasan Selisih
-                                                    </flux:menu.item>
-                                                @endif
-                                            </flux:menu.group>
-                                        </flux:menu>
-                                    </flux:dropdown>
-                                @endif
+                                            @endif
+                                        </flux:menu.group>
+                                    </flux:menu>
+                                </flux:dropdown>
                             </x-table.cell>
                         </x-table.row>
                     @empty

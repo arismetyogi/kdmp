@@ -33,4 +33,9 @@ class ClaimUpload extends Model
     {
         return $this->hasOne(Claim::class, 'upload_id', 'id');
     }
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'customer_name', 'customer_name');
+    }
 }

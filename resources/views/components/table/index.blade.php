@@ -9,5 +9,11 @@
         <tbody class="bg-white dark:bg-zinc-900 text-sm">
         {{ $body }}
         </tbody>
+
+        <tfoot class="text-base">
+        <tr>
+            {{ $foot }}
+        </tr>
+        </tfoot>
     </table>
 </div>

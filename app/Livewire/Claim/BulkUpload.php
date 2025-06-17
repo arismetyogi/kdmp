@@ -72,7 +72,7 @@ class BulkUpload extends Component
             return back()->with('error', 'Extensi Salah !!');
         }
 
-        $filePath = $fileUpload->store('claim-uploads/' . date('Y/m'));
+        $filePath = $fileUpload->store('claims/uploads/' . date('Y/m'));
 
         if (!$filePath) {
             return back()->with('error', 'Upload file gagal !!');
