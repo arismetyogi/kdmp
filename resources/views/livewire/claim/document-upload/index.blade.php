@@ -12,7 +12,7 @@
                     <flux:select wire:model.live="unitBisnisCode" :disabled="(auth()->user()->role_id != 99)">
                         @foreach($branchOffice as $branch)
                             <flux:select.option
-                                value="{{ $branch->unitbisnis_code }}">{{ substr(str()->headline($branch->name), 12,20) }}</flux:select.option>
+                                value="{{ $branch->unitbisnis_code }}">{{ substr($branch->name, 12,20) }}</flux:select.option>
                         @endforeach
                     </flux:select>
                     <flux:select wire:model.live="period">
@@ -54,7 +54,7 @@
                 <x-slot name="body">
                     @forelse($claimUploads as $uploadData)
                         <x-table.row :even="$loop->even">
-                            <x-table.cell>{{ $claimUploads->firstItem() + $loop->index }}</x-table.cell>
+                            <x-table.cell index>{{ $claimUploads->firstItem() + $loop->index }}</x-table.cell>
                             <x-table.cell>{{ substr(str()->headline($uploadData->branch?->name), 12, 20) }}</x-table.cell>
                             <x-table.cell>
                                 <flux:tooltip>
@@ -66,10 +66,9 @@
                                 </flux:tooltip>
                             </x-table.cell>
                             <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->translatedFormat('M-Y') }}</x-table.cell>
-                            <x-table.cell>{{ currency_format($uploadData->total) }}</x-table.cell>
-                            <x-table.cell>{{ currency_format($uploadData->claim?->invoice_value) }}</x-table.cell>
-                            <x-table.cell
-                                class="min-w-full">{{ currency_format($uploadData->claim?->invoice_value - $uploadData->total) }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->total }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->claim?->invoice_value }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->claim?->invoice_value - $uploadData->total }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->claim?->reason }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->claim?->notes }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->status ? 'Closed' : 'Open' }}</x-table.cell>

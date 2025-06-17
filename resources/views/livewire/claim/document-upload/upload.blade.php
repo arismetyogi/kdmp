@@ -72,10 +72,10 @@
                         @endphp
                         @forelse($claimDetails as $claim)
                             <x-table.row :even="$loop->even">
-                                <x-table.cell>{{ $loop->iteration }}</x-table.cell>
+                                <x-table.cell index>{{ $loop->iteration }}</x-table.cell>
                                 <x-table.cell>{{ $claim->invoice_number }}</x-table.cell>
                                 <x-table.cell
-                                    class="text-end">{{ currency_format($claim->invoice_value) }}</x-table.cell>
+                                    class="text-end">{{ $claim->invoice_value }}</x-table.cell>
                                 <x-table.cell>{{ $claim->delivery_date }}</x-table.cell>
                                 <x-table.cell>
                                     @isset($claim->upload_invoice_file)
@@ -95,6 +95,7 @@
                                     @endisset
                                     <flux:button>Upload</flux:button>
                                 </x-table.cell>
+                                <x-table.cell>Action</x-table.cell>
                             </x-table.row>
                         @empty
                             <tr>
@@ -106,16 +107,17 @@
                         @endforelse
 
                         @php
-                            $totalInvoiceValue += $claim->invoice_value;
+                            $totalInvoiceValue += $claim?->invoice_value;
                         @endphp
+
+                        <x-table.row :even="true" class="font-bold text-base">
+                            <x-table.cell class="text-end" colspan="2">Total Klaim Invoice</x-table.cell>
+                            <x-table.cell>{{ $totalInvoiceValue }}</x-table.cell>
+                            <x-table.cell class="text-end">Total Omset</x-table.cell>
+                            <x-table.cell>{{ $claimUpload->total }}</x-table.cell>
+                            <x-table.cell colspan="3"/>
+                        </x-table.row>
                     </x-slot>
-                    <tr>
-                        <th colspan="2" class="text-end">Total</th>
-                        <th class="text-end">{{ currency_format($totalInvoiceValue) }}</th>
-                        <th>Total Omset</th>
-                        <th>{{ currency_format($claimUpload->total) }}</th>
-                        <th colspan="3"></th>
-                    </tr>
                 </x-table.index>
             </div>
         </div>
