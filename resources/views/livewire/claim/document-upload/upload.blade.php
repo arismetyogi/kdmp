@@ -1,7 +1,7 @@
 <div class="w-full h-full">
     <div class="relative mb-6 w-full">
         <flux:heading size="xl" level="1">{{ __('Upload Dokumen Klaim') }}</flux:heading>
-        <flux:subheading size="lg" class="mb-6">{{ $claimUpload->customer_name }}</flux:subheading>
+        <flux:subheading size="lg" class="mb-6">{{ $claimUpload->customer->customer_name }}</flux:subheading>
         <flux:separator variant="subtle"/>
     </div>
 
@@ -16,10 +16,10 @@
                         <flux:input label="Nomor Invoice" wire:model="invoice_number" name="invoice_number"/>
                         <flux:input label="Tanggal Invoice" wire:model="invoice_date" name="invoice_date" type="date"/>
                         <flux:input label="Upload Invoice" wire:model="upload_invoice_file" name="upload_invoice_file"
-                                    type="file"
+                                    type="file" :required="false"
                                     accept="pdf,jpg,jpeg"/>
                         <flux:input label="Upload Faktur Pajak" wire:model="tax_invoice_file" name="tax_invoice_file"
-                                    type="file"
+                                    type="file" :required="false"
                                     accept="pdf,jpg,jpeg"/>
                         <flux:input.group label="Nominal Invoice">
                             <flux:input.group.prefix>Rp</flux:input.group.prefix>
@@ -29,15 +29,15 @@
                         <flux:input label="Tgl. Pengiriman Alat Tagih" wire:model="delivery_date" name="delivery_date"
                                     type="date"/>
                         <flux:input label="Bukti Kirim Tanda Terima Alat Tagih" wire:model="receipt_file"
-                                    name="receipt_file" type="file"
+                                    name="receipt_file" type="file" :required="false"
                                     accept="pdf,jpg,jpeg"/>
                         <flux:input label="Nomor Tracking Customer" wire:model="customer_tracking_number"
                                     name="customer_tracking_number" type="text"/>
                         <flux:input label="Upload PO Customer" wire:model="po_customer_file"
-                                    name="po_customer_file" type="file"
+                                    name="po_customer_file" type="file" :required="false"
                                     accept="pdf,jpg,jpeg"/>
                         <flux:input label="Upload BA Penyerahan Barang" wire:model="receipt_order_file"
-                                    name="receipt_order_file" type="file"
+                                    name="receipt_order_file" type="file" :required="false"
                                     accept="pdf,jpg,jpeg"/>
                     </div>
 
@@ -97,6 +97,10 @@
                                 </x-table.cell>
                                 <x-table.cell>Action</x-table.cell>
                             </x-table.row>
+
+                            @php
+                                $totalInvoiceValue += $claim?->invoice_value;
+                            @endphp
                         @empty
                             <tr>
                                 <td colspan="15"
@@ -105,10 +109,6 @@
                                 </td>
                             </tr>
                         @endforelse
-
-                        @php
-                            $totalInvoiceValue += $claim?->invoice_value;
-                        @endphp
 
                         <x-table.row :even="true" class="font-bold text-base">
                             <x-table.cell class="text-end" colspan="2">Total Klaim Invoice</x-table.cell>
