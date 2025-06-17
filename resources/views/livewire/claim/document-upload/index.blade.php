@@ -83,7 +83,7 @@
                                         <flux:menu>
                                             <flux:menu.group>
                                                 <flux:menu.item class="cursor-pointer" icon="document-arrow-up"
-                                                                href="{{ route('claim-document-upload.upload', ['id' => $uploadData->id]) }}">
+                                                                href="{{ route('claim-document-upload.upload', ['id' => Crypt::encryptString($uploadData->id)]) }}">
                                                     {{ __('Upload Dokumen') }}
                                                 </flux:menu.item>
                                                 @if(isset($uploadData->claim->id) && ($uploadData->claim?->invoice_value - $uploadData->total) != 0)
