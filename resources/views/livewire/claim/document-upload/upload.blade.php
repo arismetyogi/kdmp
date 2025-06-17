@@ -78,22 +78,25 @@
                                     class="text-end">{{ $claim->invoice_value }}</x-table.cell>
                                 <x-table.cell>{{ $claim->delivery_date }}</x-table.cell>
                                 <x-table.cell>
-                                    @isset($claim->upload_invoice_file)
+                                    @if(isset($claim->upload_invoice_file))
                                         <flux:menu.item href="#" target="_blank">File sudah diupload</flux:menu.item>
-                                    @endisset
-                                    <flux:button>Upload</flux:button>
+                                    @else
+                                        <flux:button>Upload</flux:button>
+                                    @endif
                                 </x-table.cell>
                                 <x-table.cell>
-                                    @isset($claim->receipt_file)
+                                    @if(isset($claim->receipt_file))
                                         <flux:menu.item href="#" target="_blank">File sudah diupload</flux:menu.item>
-                                    @endisset
+                                    @else
                                     <flux:button>Upload</flux:button>
+                                    @endif
                                 </x-table.cell>
                                 <x-table.cell>
-                                    @isset($claim->tax_invoice_file)
+                                    @if(isset($claim->tax_invoice_file))
                                         <flux:menu.item href="#" target="_blank">File sudah diupload</flux:menu.item>
-                                    @endisset
+                                    @else
                                     <flux:button>Upload</flux:button>
+                                    @endif
                                 </x-table.cell>
                                 <x-table.cell>Action</x-table.cell>
                             </x-table.row>
