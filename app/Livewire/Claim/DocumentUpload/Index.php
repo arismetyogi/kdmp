@@ -10,12 +10,12 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Session;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 #[Layout('components.layouts.app')]
 class Index extends Component
 {
     use WithPagination;
 
-    #[Session]
     public $perPage = 10;
     #[Session]
     public $userUBCode;

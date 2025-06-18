@@ -74,7 +74,7 @@
                             <x-table.cell>{{ $uploadData->status ? 'Closed' : 'Open' }}</x-table.cell>
                             <x-table.cell>
                                 <flux:dropdown>
-                                    <flux:button size="xs" variant="filled" icon-trailing="chevron-down">Action
+                                    <flux:button size="sm" variant="filled" icon-trailing="chevron-down">Action
                                     </flux:button>
                                     <flux:menu>
                                         <flux:menu.group>

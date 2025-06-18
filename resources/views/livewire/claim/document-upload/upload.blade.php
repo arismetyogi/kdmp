@@ -1,7 +1,7 @@
 <div class="w-full h-full">
     <div class="relative mb-6 w-full">
         <flux:heading size="xl" level="1">{{ __('Upload Dokumen Klaim') }}</flux:heading>
-        <flux:subheading size="lg" class="mb-6">{{ $claimUpload->customer->customer_name }}</flux:subheading>
+        <flux:subheading size="lg" class="mb-6">{{ $claimUpload->customer?->customer_name }}</flux:subheading>
         <flux:separator variant="subtle"/>
     </div>
 
@@ -12,7 +12,7 @@
                     <flux:heading size="lg" class="text-start">Lengkapi data dokumen klaim berikut</flux:heading>
                     <flux:separator/>
                     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 my-8">
-                        <flux:input disabled label="Debitur" value="{{ $claimUpload->customer_name }}"/>
+                        <flux:input disabled label="Debitur" value="{{ $claimUpload->customer?->customer_name }}"/>
                         <flux:input label="Nomor Invoice" wire:model="invoice_number" name="invoice_number"/>
                         <flux:input label="Tanggal Invoice" wire:model="invoice_date" name="invoice_date" type="date"/>
                         <flux:input label="Upload Invoice" wire:model="upload_invoice_file" name="upload_invoice_file"
@@ -88,14 +88,14 @@
                                     @if(isset($claim->receipt_file))
                                         <flux:menu.item href="#" target="_blank">File sudah diupload</flux:menu.item>
                                     @else
-                                    <flux:button>Upload</flux:button>
+                                        <flux:button>Upload</flux:button>
                                     @endif
                                 </x-table.cell>
                                 <x-table.cell>
                                     @if(isset($claim->tax_invoice_file))
                                         <flux:menu.item href="#" target="_blank">File sudah diupload</flux:menu.item>
                                     @else
-                                    <flux:button>Upload</flux:button>
+                                        <flux:button>Upload</flux:button>
                                     @endif
                                 </x-table.cell>
                                 <x-table.cell>Action</x-table.cell>
