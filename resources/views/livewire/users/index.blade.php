@@ -14,7 +14,7 @@
         <div class="p-4 overflow-y-auto bg-zinc-50 shadow-xl sm:rounded-lg dark:bg-zinc-700/30 w-full">
             <div class="flex gap-2 mb-4 items-center justify-between">
                 <div class="w-96">
-                    <flux:select wire:model.live="unitBisnis">
+                    <flux:select wire:model.live="selectedBranch">
                         @foreach(\App\Models\BranchOffice::all() as $branch)
                             <flux:select.option
                                 value="{{ $branch->unitbisnis_code }}">{{ substr(str()->headline($branch->name), 12,20) }}</flux:select.option>

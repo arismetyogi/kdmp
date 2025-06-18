@@ -21,7 +21,7 @@ class Index extends Component
         $checkPage = false,
         $checkAll = false,
         $search = '',
-        $selectBranch,
+        $selectedBranch = 3000,
         $perPage = 10,
         $sortField = 'users.updated_at',
         $sortDirection = 'desc',
@@ -39,7 +39,7 @@ class Index extends Component
         $this->checkAll = false;
     }
 
-    public function updatedSelectBranch(): void
+    public function updatedSelectedBranch(): void
     {
         $this->resetPage();
         $this->checked = [];
@@ -66,6 +66,8 @@ class Index extends Component
             ->select('users.*', 'branch_offices.name as branch_name', 'roles.name as role_name')
             ->when($this->search, fn($query, $search) => $query
                 ->whereAny(['users.name', 'users.username', 'users.email', 'branch_name', 'role_name'], 'like', "%{$search}%")
+            )->when($this->selectedBranch != 3000, fn($query) => $query
+                ->where('users.unitbisnis_code', $this->selectedBranch)
             )
             ->orderByRaw("CASE WHEN {$this->sortField} IS NULL THEN 1 ELSE 0 END, {$this->sortField} {$this->sortDirection}");
     }
@@ -74,6 +76,7 @@ class Index extends Component
     {
         return $this->usersQuery->paginate($this->perPage);
     }
+
     public function getSessionsProperty(): Collection
     {
         if (config('session.driver') !== 'database') {
