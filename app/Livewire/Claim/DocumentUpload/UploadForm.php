@@ -5,7 +5,6 @@ namespace App\Livewire\Claim\DocumentUpload;
 use App\Models\Claim;
 use App\Models\ClaimDetail;
 use App\Models\ClaimUpload;
-use Crypt;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Livewire\Attributes\Session;
@@ -94,7 +93,7 @@ class UploadForm extends Component
             }
         }
 
-        $uploadId = $this->claimUpload->id;
+        $uploadId = $this->upload_id;
         $detil['upload_id'] = $uploadId;
         $rekap['upload_id'] = $uploadId;
 
@@ -115,6 +114,8 @@ class UploadForm extends Component
 
         ClaimDetail::create($detil);
         $this->resetForm();
+
+        $this->dispatch('refresh-details');
         return back()->with('success', 'Upload Berhasil !!');
     }
 
