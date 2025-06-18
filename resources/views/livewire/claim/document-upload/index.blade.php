@@ -26,6 +26,10 @@
                     </flux:select>
                 </div>
                 <flux:spacer/>
+                <div class="ml-auto w-96">
+                    <flux:input icon="magnifying-glass" placeholder="Search..." wire:model.live.debounce="search"
+                                clearable="true"/>
+                </div>
                 <flux:button type="primary" wire:click="export">Export</flux:button>
             </div>
             <div wire:model.live="perPage" class="flex gap-2 items-center">

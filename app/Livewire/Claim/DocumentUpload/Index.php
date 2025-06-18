@@ -23,7 +23,7 @@ class Index extends Component
     public ?string $unitBisnisCode = null;
     public $periods;
     #[Session]
-    public $period;
+    public $period, $search;
 
     public function mount(): void
     {
@@ -40,6 +40,9 @@ class Index extends Component
 
         $query = ClaimUpload::with('branch')
             ->whereBetween('period', [$startDate, $endDate])
+            ->when($this->search, fn($query, $search) => $query
+                ->whereAny(['customer_name'], 'like', "%{$search}%")
+            )
             ->latest();
 
         if ($this->userUBCode != 3000) {
@@ -72,12 +75,17 @@ class Index extends Component
         ]);
     }
 
-    public function updatingPeriod(): void
+    public function updatedPeriod(): void
     {
         $this->resetPage();
     }
 
-    public function updatingUnitBisnisCode(): void
+    public function updatedUnitBisnisCode(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedSearch(): void
     {
         $this->resetPage();
     }
