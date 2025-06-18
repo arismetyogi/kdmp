@@ -44,9 +44,12 @@
             <x-table.index id="uploadClaimTable">
                 <x-slot name="head">
                     <x-table.heading sortable>#</x-table.heading>
-                    <x-table.heading sortable>Waktu</x-table.heading>
-                    <x-table.heading sortable>Periode</x-table.heading>
-                    <x-table.heading sortable>Batch</x-table.heading>
+                    <x-table.heading sortable wire:click="sortBy('updated_at')"
+                                     :direction="$sortField === 'updated_at' ? $sortDirection : null">Waktu</x-table.heading>
+                    <x-table.heading sortable wire:click="sortBy('period')"
+                                     :direction="$sortField === 'period' ? $sortDirection : null">Periode</x-table.heading>
+                    <x-table.heading sortable wire:click="sortBy('batch_id')"
+                                     :direction="$sortField === 'batch_id' ? $sortDirection : null">Batch</x-table.heading>
                     <x-table.heading sortable>Unit Bisnis</x-table.heading>
                     <x-table.heading sortable>Total</x-table.heading>
                     <x-table.heading sortable>User</x-table.heading>
@@ -60,7 +63,7 @@
                             <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->format('M-Y') }}</x-table.cell>
                             <x-table.cell>{{ short_batch($uploadData->batch_id) }}</x-table.cell>
                             <x-table.cell>{{ substr(str()->headline($uploadData->branch->name), 12,20) }}</x-table.cell>
-                            <x-table.cell>{{ currency_format($uploadData->total_claims) }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->total_claims }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->user?->name }}</x-table.cell>
                             <x-table.cell>
                                 <flux:dropdown>

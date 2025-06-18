@@ -26,7 +26,19 @@ class BulkUpload extends Component
     public $claimFile = null;
     public $perPage = 10;
     public $batchId = null;
+    public $sortField = 'updated_at';
+    public $sortDirection = 'desc';
+    protected $queryString = ['search', 'sortField', 'sortDirection'];
+    public function sortBy($field): void
+    {
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection == 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortDirection = 'asc';
+        }
 
+        $this->sortField = $field;
+    }
     #[On('delete-batch')]
     public function deleteUpload($batchId): void
     {
@@ -137,8 +149,8 @@ class BulkUpload extends Component
     {
         $claimUploads = ClaimUpload::with(['user', 'branch'])
             ->select('batch_id', 'user_id', 'unitbisnis_code', 'period', DB::raw('COUNT(*) as total_uploads, SUM(total) as total_claims'))
-            ->groupBy('batch_id', 'user_id', 'unitbisnis_code', 'period')
-            ->orderBy('batch_id', 'DESC')
+            ->groupBy('updated_at', 'batch_id', 'user_id', 'unitbisnis_code', 'period')
+            ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
         return view('livewire.claim.bulk-upload', ['claimUploads' => $claimUploads]);
     }
