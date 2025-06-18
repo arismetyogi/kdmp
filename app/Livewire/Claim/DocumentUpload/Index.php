@@ -55,7 +55,7 @@ class Index extends Component
         return $this->claimUploadsQuery->paginate($this->perPage);
     }
 
-    public function getBranchOfficeProperty()
+    public function getBranchOfficeProperty(): \Illuminate\Database\Eloquent\Collection|array|\LaravelIdea\Helper\App\Models\_IH_BranchOffice_C
     {
         if ($this->userUBCode == 3000) {
             return BranchOffice::all();
@@ -70,5 +70,15 @@ class Index extends Component
             'claimUploads' => $this->claimUploads,
             'branchOffice' => $this->branchOffice
         ]);
+    }
+
+    public function updatingPeriod(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingUnitBisnisCode(): void
+    {
+        $this->resetPage();
     }
 }

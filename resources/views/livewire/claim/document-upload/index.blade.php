@@ -40,6 +40,7 @@
             <x-table.index id="uploadClaimDocsTable">
                 <x-slot name="head">
                     <x-table.heading sortable>#</x-table.heading>
+                    <x-table.heading sortable></x-table.heading>
                     <x-table.heading sortable>Unit Bisnis</x-table.heading>
                     <x-table.heading sortable>Debitur</x-table.heading>
                     <x-table.heading sortable>Periode</x-table.heading>
@@ -49,29 +50,11 @@
                     <x-table.heading sortable>Alasan</x-table.heading>
                     <x-table.heading sortable>Ket</x-table.heading>
                     <x-table.heading sortable>Status</x-table.heading>
-                    <x-table.heading sortable></x-table.heading>
                 </x-slot>
                 <x-slot name="body">
                     @forelse($claimUploads as $uploadData)
                         <x-table.row :even="$loop->even">
                             <x-table.cell index>{{ $claimUploads->firstItem() + $loop->index }}</x-table.cell>
-                            <x-table.cell>{{ substr(str()->headline($uploadData->branch?->name), 12, 20) }}</x-table.cell>
-                            <x-table.cell>
-                                <flux:tooltip>
-                                    <flux:tooltip.index>
-                                        {{ substr($uploadData->customer_name, 0, 25) }}...
-                                    </flux:tooltip.index>
-                                    <flux:tooltip.content
-                                        class="bg-accent-content">{{ $uploadData->customer_name }}</flux:tooltip.content>
-                                </flux:tooltip>
-                            </x-table.cell>
-                            <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->translatedFormat('M-Y') }}</x-table.cell>
-                            <x-table.cell>{{ $uploadData->total }}</x-table.cell>
-                            <x-table.cell>{{ $uploadData->claim?->invoice_value }}</x-table.cell>
-                            <x-table.cell>{{ $uploadData->claim?->invoice_value - $uploadData->total }}</x-table.cell>
-                            <x-table.cell>{{ $uploadData->claim?->reason }}</x-table.cell>
-                            <x-table.cell>{{ $uploadData->claim?->notes }}</x-table.cell>
-                            <x-table.cell>{{ $uploadData->status ? 'Closed' : 'Open' }}</x-table.cell>
                             <x-table.cell>
                                 <flux:dropdown>
                                     <flux:button size="sm" variant="filled" icon-trailing="chevron-down">Action
@@ -91,6 +74,23 @@
                                     </flux:menu>
                                 </flux:dropdown>
                             </x-table.cell>
+                            <x-table.cell>{{ substr(str()->headline($uploadData->branch?->name), 12, 20) }}</x-table.cell>
+                            <x-table.cell>
+                                <flux:tooltip>
+                                    <flux:tooltip.index>
+                                        {{ substr($uploadData->customer_name, 0, 25) }}...
+                                    </flux:tooltip.index>
+                                    <flux:tooltip.content
+                                        class="bg-accent-content">{{ $uploadData->customer_name }}</flux:tooltip.content>
+                                </flux:tooltip>
+                            </x-table.cell>
+                            <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->translatedFormat('M-Y') }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->total }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->claim?->invoice_value }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->claim?->invoice_value - $uploadData->total }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->claim?->reason }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->claim?->notes }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->status ? 'Closed' : 'Open' }}</x-table.cell>
                         </x-table.row>
                     @empty
                         <tr>
