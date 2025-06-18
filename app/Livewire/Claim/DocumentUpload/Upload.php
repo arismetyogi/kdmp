@@ -45,6 +45,18 @@ class Upload extends Component
         $this->period = $this->claimUpload->period;
     }
 
+    public function setClaimDetail(?ClaimDetail $claimDetail = null): void
+    {
+        $this->claimDetail = $claimDetail;
+        $this->invoice_number = $claimDetail->invoice_number;
+        $this->invoice_value = $claimDetail->invoice_value;
+        $this->delivery_date = $claimDetail->delivery_date;
+    }
+    public function edit(?ClaimDetail $claimDetail = null): void
+    {
+        $this->setClaimDetail($claimDetail);
+    }
+
     public function rules(): array
     {
         return [

@@ -98,7 +98,9 @@
                                         <flux:button>Upload</flux:button>
                                     @endif
                                 </x-table.cell>
-                                <x-table.cell>Action</x-table.cell>
+                                <x-table.cell>
+                                    <flux:button icon="pencil-square" wire:click="edit({{ $claim->id }})"></flux:button>
+                                </x-table.cell>
                             </x-table.row>
 
                             @php
