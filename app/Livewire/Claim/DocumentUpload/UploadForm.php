@@ -1,0 +1,130 @@
+<?php
+
+namespace App\Livewire\Claim\DocumentUpload;
+
+use App\Models\Claim;
+use App\Models\ClaimDetail;
+use App\Models\ClaimUpload;
+use Crypt;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Livewire\Attributes\Session;
+use Livewire\Component;
+use Livewire\Mechanisms\HandleComponents\HandleComponents;
+
+class UploadForm extends Component
+{
+    public $id;
+    public ClaimDetail $claimDetail;
+    #[Session]
+    public ClaimUpload $claimUpload;
+
+    public $upload_invoice_file, $receipt_file, $tax_invoice_file, $po_customer_file, $receipt_order_file;
+    // claim details
+    public $upload_id, $invoice_number, $invoice_value, $delivery_date, $invoice_date, $customer_tracking_number, $updated_by;
+    // claim - recap
+    public $customer_id, $value, $period, $unitbisnis_code, $user_id;
+
+    // access parent component
+    private function getParentComponentInstance()
+    {
+        return app(HandleComponents::class)::$componentStack[0];
+    }
+    public function mount(): void
+    {
+        $parent = $this->getParentComponentInstance();
+        $this->id = $parent->id;
+        $this->upload_id = $parent->id;
+        $this->claimUpload = ClaimUpload::find($this->id);
+        $this->updated_by = auth()->user()->id;
+        $this->user_id = $this->updated_by;
+        $this->unitbisnis_code = $this->claimUpload->unitbisnis_code;
+        $this->customer_id = $this->claimUpload->customer?->id;
+        $this->period = $this->claimUpload->period;
+    }
+    public function setClaimDetail(?ClaimDetail $claimDetail = null): void
+    {
+        $this->claimDetail = $claimDetail;
+        $this->invoice_number = $claimDetail->invoice_number;
+        $this->invoice_value = $claimDetail->invoice_value;
+        $this->delivery_date = $claimDetail->delivery_date;
+    }
+    public function edit(?ClaimDetail $claimDetail = null): void
+    {
+        $this->setClaimDetail($claimDetail);
+    }
+
+    public function rules(): array
+    {
+        return [
+            'upload_id' => 'required',
+            'invoice_number' => 'required|string',
+            'delivery_date' => 'required|date',
+            'upload_invoice_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'receipt_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'tax_invoice_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'invoice_date' => 'required|date',
+            'po_customer_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'receipt_order_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'customer_tracking_number' => 'required|string',
+            'updated_by' => 'required',
+        ];
+    }
+
+    public function save(Request $request)
+    {
+        $invoiceValue = str_replace([',', '.'], '', $this->invoice_value);
+        $detil = $this->validate();
+
+        $rekap = $this->validate([
+            'customer_id' => 'required|integer',
+            'period' => 'required',
+            'unitbisnis_code' => 'required',
+            'invoice_value' => 'required',
+        ]);
+
+        foreach (['upload_invoice_file', 'receipt_file', 'tax_invoice_file', 'receipt_order_file', 'po_customer_file'] as $fileKey) {
+            if ($request->hasFile($fileKey)) {
+                $file = $request->file($fileKey);
+                $fileName = $this->unitbisnis_code . '-' . $this->customer_id . '-' . $file->getClientOriginalName();
+                $detil[$fileKey] = $file->storePubliclyAs(
+                    'claims/docs/' . date('Y/m'),
+                    $fileName
+                );
+            }
+        }
+
+        $uploadId = $this->claimUpload->id;
+        $detil['upload_id'] = $uploadId;
+        $rekap['upload_id'] = $uploadId;
+
+        $detil['updated_by'] = $this->updated_by;
+        $rekap['user_id'] = $this->updated_by;
+
+        $detil['invoice_value'] = $invoiceValue;
+        $rekap['invoice_value'] = $invoiceValue;
+        //! check
+        $rekap['value'] = $this->claimUpload->total;
+
+        $claimExist = Claim::where('upload_id', $uploadId)->first();
+        if ($claimExist) {
+            $claimExist->update(['invoice_value' => $claimExist->invoice_value + $detil['invoice_value']]);
+        } else {
+            Claim::create($rekap);
+        }
+
+        ClaimDetail::create($detil);
+        $this->resetForm();
+        return back()->with('success', 'Upload Berhasil !!');
+    }
+
+    public function render(): View
+    {
+        return view('livewire.claim.document-upload.upload-form');
+    }
+
+    public function resetForm()
+    {
+        $this->resetExcept('claimUpload');
+    }
+}
