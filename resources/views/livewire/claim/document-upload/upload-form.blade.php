@@ -33,9 +33,6 @@
         </div>
 
         <div class="flex gap-2">
-            <flux:button icon="arrow-uturn-left" href="{{ route('claim-document-upload.index') }}"
-                         variant="danger">{{ __('Back') }}</flux:button>
-
             <flux:button wire:click="resetForm" variant="filled">
                 {{ __('Reset') }}
             </flux:button>
