@@ -38,7 +38,7 @@
                             setTimeout(function(){
                                 that.stackToasts();
                             }, 1)
-                        }, 3000);
+                        }, 300);
                     }
                 },
                 getToastWithId(id){
@@ -54,7 +54,7 @@
                     let that = this;
                     setTimeout(function(){
                         that.calculateHeightOfToastsContainer();
-                    }, 3000);
+                    }, 300);
                 },
                 positionToasts(){
                     if(this.toasts.length == 0) return;
@@ -160,7 +160,7 @@
                     // Burn 🔥 (remove) last toast
                     setTimeout(function(){
                             that.toasts.pop();
-                        }, 3000);
+                        }, 300);
 
                     if(this.position.includes('bottom')){
                             middleToast.style.top = 'auto';
@@ -335,7 +335,7 @@
                                 }
                                 setTimeout(function(){
                                     deleteToastWithId(toast.id)
-                                }, 3000);
+                                }, 300);
                             }, 5);
                         }, 4000);
                     "

@@ -78,20 +78,28 @@ class BulkUpload extends Component
     public function uploadClaim(Request $request): RedirectResponse
     {
         $this->validate([
-            'claimFile' => 'file|mimes:xlsx',
+            'claimFile' => 'mimes:xlsx',
         ]);
+
+        if ($this->getErrorBag()->any()) {
+            $this->toast('File yang diupload tidak valid, mohon ulangi lagi', type: 'warning');
+        }
 
         $fileUpload = $this->claimFile;
         $fileExtension = $fileUpload->getClientOriginalExtension();
 
         if ($fileExtension != 'xlsx') {
-            return back()->with('error', 'Extensi Salah !!');
+            $this->toast('Format file harus xlsx', 'danger');
+            $this->reset('claimFile');
+            return back();
         }
 
         $filePath = $fileUpload->store('claims/uploads/' . date('Y/m'));
 
         if (!$filePath) {
-            return back()->with('error', 'Upload file gagal !!');
+            $this->toast('Upload file gagal', 'danger');
+            $this->reset('claimFile');
+            return back();
         }
 
         $file = Storage::path($filePath);
@@ -117,8 +125,9 @@ class BulkUpload extends Component
                     try {
                         $value = Carbon::createFromFormat('m/d/Y', $value)->format('Y-m-d');
                     } catch (\Exception $e) {
-                        // Jika format tidak valid, bisa atur default atau abaikan
                         $value = null;
+                        $this->toast('Data tidak valid', 'danger');
+                        return back();
                     }
                 }
                 $results[$row][$header[$col - 1]] = $value;
@@ -146,7 +155,8 @@ class BulkUpload extends Component
 
         $this->claimFile = null;
 
-        return back()->with('success', 'Data Berhasil Diupload !!');
+        $this->toast(message: 'Upload Berhasil !!', type: 'success');
+        return back();
     }
 
     public function render(): View
