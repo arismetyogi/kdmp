@@ -27,6 +27,8 @@
                     </flux:button>
                     <flux:button variant="filled" class="w-full" href="files/claim_uploads.xlsx"
                                  icon:trailing="arrow-up-right"> {{ __('Download Template') }}</flux:button>
+                    <flux:button wire:click="callToast">Call Toast</flux:button>
+                    <flux:button wire:click="callToastError">Call Toast2</flux:button>
                 </div>
             </form>
         </div>
@@ -45,11 +47,14 @@
                 <x-slot name="head">
                     <x-table.heading sortable>#</x-table.heading>
                     <x-table.heading sortable wire:click="sortBy('updated_at')"
-                                     :direction="$sortField === 'updated_at' ? $sortDirection : null">Waktu</x-table.heading>
+                                     :direction="$sortField === 'updated_at' ? $sortDirection : null">Waktu
+                    </x-table.heading>
                     <x-table.heading sortable wire:click="sortBy('period')"
-                                     :direction="$sortField === 'period' ? $sortDirection : null">Periode</x-table.heading>
+                                     :direction="$sortField === 'period' ? $sortDirection : null">Periode
+                    </x-table.heading>
                     <x-table.heading sortable wire:click="sortBy('batch_id')"
-                                     :direction="$sortField === 'batch_id' ? $sortDirection : null">Batch</x-table.heading>
+                                     :direction="$sortField === 'batch_id' ? $sortDirection : null">Batch
+                    </x-table.heading>
                     <x-table.heading sortable>Unit Bisnis</x-table.heading>
                     <x-table.heading sortable>Total</x-table.heading>
                     <x-table.heading sortable>User</x-table.heading>

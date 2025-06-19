@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Claim;
 
+use App\Helpers\WithToast;
 use App\Models\ClaimUpload;
 use Carbon\Carbon;
 use Flux\Flux;
@@ -22,6 +23,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Xlsx as ExcelReaderXlsx;
 class BulkUpload extends Component
 {
     use WithPagination, WithFileUploads;
+    use WithToast;
 
     public $claimFile = null;
     public $perPage = 10;
@@ -29,6 +31,7 @@ class BulkUpload extends Component
     public $sortField = 'updated_at';
     public $sortDirection = 'desc';
     protected $queryString = ['search', 'sortField', 'sortDirection'];
+
     public function sortBy($field): void
     {
         if ($this->sortField === $field) {
@@ -39,6 +42,7 @@ class BulkUpload extends Component
 
         $this->sortField = $field;
     }
+
     #[On('delete-batch')]
     public function deleteUpload($batchId): void
     {
@@ -155,4 +159,13 @@ class BulkUpload extends Component
         return view('livewire.claim.bulk-upload', ['claimUploads' => $claimUploads]);
     }
 
+    public function callToast(): void
+    {
+        $this->toast(message: 'Toast Message', type: 'success');
+    }
+
+    public function callToastError(): void
+    {
+        $this->toast(message: 'Toast Error Message', type: 'danger');
+    }
 }
