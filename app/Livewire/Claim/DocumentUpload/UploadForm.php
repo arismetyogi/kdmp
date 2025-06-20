@@ -6,7 +6,6 @@ use App\Helpers\WithToast;
 use App\Models\Claim;
 use App\Models\ClaimDetail;
 use App\Models\ClaimUpload;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Livewire\Attributes\Session;
 use Livewire\Component;
@@ -65,18 +64,18 @@ class UploadForm extends Component
         return [
             'upload_id' => 'required',
             'invoice_number' => 'required|string',
-            'delivery_date' => 'required|date',
-            'upload_invoice_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
-            'receipt_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
-            'tax_invoice_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
             'invoice_date' => 'required|date',
+            'upload_invoice_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'tax_invoice_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'delivery_date' => 'nullable|date',
+            'receipt_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
             'po_customer_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
             'receipt_order_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
-            'customer_tracking_number' => 'required|string',
+            'customer_tracking_number' => 'nullable|string',
         ];
     }
 
-    public function save(Request $request)
+    public function save(): \Illuminate\Http\RedirectResponse
     {
         $invoiceValue = str_replace([',', '.'], '', $this->invoice_value);
         $detil = $this->validate();
@@ -109,9 +108,13 @@ class UploadForm extends Component
         $claim = ClaimDetail::create($detil);
 
         foreach (['upload_invoice_file', 'receipt_file', 'tax_invoice_file', 'receipt_order_file', 'po_customer_file'] as $fileKey) {
-            $fileName = $this->unitbisnis_code . '-' . $this->customer_id;
-//            dd($fileKey);
+            if (!isset($this->{$fileKey}) || !$this->{$fileKey}) {
+                continue; // skip if the file is not uploaded
+            }
+            $fileName = $this->unitbisnis_code . '_' . $this->invoice_number . '_' . $fileKey . '_' . now()->timestamp . '.' . $this->{$fileKey}->getClientOriginalExtension();
             $claim->addMedia($this->{$fileKey})
+                ->usingName($this->customer_id . now()->timestamp)
+                ->usingFileName($fileName)
                 ->toMediaCollection($fileKey);
         }
 
