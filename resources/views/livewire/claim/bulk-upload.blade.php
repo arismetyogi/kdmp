@@ -63,8 +63,8 @@
                 <x-slot name="body">
                     @forelse($claimUploads as $uploadData)
                         <x-table.row :even="$loop->even">
-                            <x-table.cell>{{ $loop->iteration }}</x-table.cell>
-                            <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->created_at)->format('d-M-Y h:m') }}</x-table.cell>
+                            <x-table.cell index>{{ $loop->iteration }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->created_at->format('d-M-Y h:m') }}</x-table.cell>
                             <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->format('M-Y') }}</x-table.cell>
                             <x-table.cell>{{ short_batch($uploadData->batch_id) }}</x-table.cell>
                             <x-table.cell>{{ substr(str()->headline($uploadData->branch->name), 12,20) }}</x-table.cell>

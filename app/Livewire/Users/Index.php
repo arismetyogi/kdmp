@@ -61,15 +61,16 @@ class Index extends Component
 
     public function getUsersQueryProperty()
     {
-        return User::with(['role', 'branch'])
-            ->leftJoin('branch_offices', 'users.unitbisnis_code', '=', 'branch_offices.unitbisnis_code')
-            ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
-            ->select('users.*', 'branch_offices.name as branch_name', 'roles.name as role_name')
-            ->when($this->search, fn($query, $search) => $query
-                ->whereAny(['users.name', 'users.username', 'users.email', 'branch_name', 'role_name'], 'like', "%{$search}%")
-            )->when($this->selectedBranch != 3000, fn($query) => $query
-                ->where('users.unitbisnis_code', $this->selectedBranch)
-            )
+        return User::with('role')
+            ->when($this->search, function ($q) {
+                $q->where(function ($q) {
+                    foreach (['users.name', 'users.username', 'users.email'] as $column) {
+                        $q->orWhere($column, 'like', "%{$this->search}%");
+                    }
+                });
+            }
+            )->when(!in_array($this->selectedBranch, [3000, 9999]), fn($query) => $query
+                ->where('users.unitbisnis_code', $this->selectedBranch))
             ->orderByRaw("CASE WHEN {$this->sortField} IS NULL THEN 1 ELSE 0 END, {$this->sortField} {$this->sortDirection}");
     }
 

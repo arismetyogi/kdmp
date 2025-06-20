@@ -47,11 +47,9 @@
                     <x-table.heading sortable wire:click="sortBy('users.name')"
                                      :direction="$sortField === 'users.name' ? $sortDirection : null">Name
                     </x-table.heading>
-                    <x-table.heading sortable wire:click="sortBy('branch_name')"
-                                     :direction="$sortField === 'branch_name' ? $sortDirection : null">Unit
+                    <x-table.heading sortable>Unit
                     </x-table.heading>
-                    <x-table.heading sortable wire:click="sortBy('role_name')"
-                                     :direction="$sortField === 'role_name' ? $sortDirection : null">
+                    <x-table.heading sortable>
                         Role
                     </x-table.heading>
                     <x-table.heading sortable wire:click="sortBy('users.updated_at')"
@@ -66,7 +64,7 @@
                                 <flux:checkbox value="{{ $user->id }}" wire:key="{{ $user->id }}"
                                                wire:model.live="checked"/>
                             </x-table.cell>
-                            <x-table.cell>{{ $users->firstItem() + $loop->index }}</x-table.cell>
+                            <x-table.cell index>{{ $users->firstItem() + $loop->index }}</x-table.cell>
                             <x-table.cell>
                                 <div class="flex items-center gap-2">
                                     <flux:avatar circle color="auto" color:seed="{{ $user->id }}"
@@ -82,13 +80,13 @@
                                 </div>
                             </x-table.cell>
                             <x-table.cell>
-                                <flux:subheading>{{ $user->branch_name ?? null }}</flux:subheading>
+                                <flux:subheading>{{ $user->branch?->name }}</flux:subheading>
                             </x-table.cell>
                             <x-table.cell>
-                                <flux:subheading>{{ $user->role?->name ?? null }}</flux:subheading>
+                                <flux:subheading>{{ $user->role?->name }}</flux:subheading>
                             </x-table.cell>
                             <x-table.cell>
-                                <flux:text>{{ $user->updated_at ? $user->updated_at->diffForHumans() : null }}</flux:text>
+                                <flux:text>{{ $user->updated_at->diffForHumans() ?? null }}</flux:text>
                             </x-table.cell>
                             <x-table.cell>
                                 <flux:dropdown>

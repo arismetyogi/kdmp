@@ -39,10 +39,9 @@ class UpdateRole extends Component
     }
 
     #[On('editRole')]
-    public function editRole($id): void
+    public function editRole(?User $user = null): void
     {
-        $this->user = User::find($id);
-        $this->setUser($this->user);
+        $this->setUser($user);
         Flux::modal('edit-role')->show();
     }
 

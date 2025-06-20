@@ -41,7 +41,7 @@ class DeleteModal extends Component
                 $record->delete();
             }
 
-            $this->toast($this->model . 'berhasil dihapus', 'success');
+            $this->toast($this->model . ' berhasil dihapus', 'success');
             // Emit an event to refresh any relevant parent components
             $this->dispatch('record-deleted', $this->recordIds);
         }

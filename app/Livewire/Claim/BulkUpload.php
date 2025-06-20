@@ -28,7 +28,7 @@ class BulkUpload extends Component
     public $claimFile = null;
     public $perPage = 10;
     public $batchId = null;
-    public $sortField = 'updated_at';
+    public $sortField = 'claim_uploads.created_at';
     public $sortDirection = 'desc';
     protected $queryString = ['search', 'sortField', 'sortDirection'];
 
@@ -162,11 +162,11 @@ class BulkUpload extends Component
     public function render(): View
     {
         $claimUploads = ClaimUpload::with(['user', 'branch'])
-            ->select('batch_id', 'user_id', 'unitbisnis_code', 'period', DB::raw('COUNT(*) as total_uploads, SUM(total) as total_claims'))
-            ->groupBy('updated_at', 'batch_id', 'user_id', 'unitbisnis_code', 'period')
+            ->select('created_at', 'batch_id', 'user_id', 'unitbisnis_code', 'period', DB::raw('COUNT(*) as total_uploads, SUM(total) as total_claims'))
+            ->groupBy('claim_uploads.created_at', 'batch_id', 'user_id', 'unitbisnis_code', 'period')
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
-        return view('livewire.claim.bulk-upload', ['claimUploads' => $claimUploads]);
+        return view('livewire.claim.bulk-upload', compact('claimUploads'));
     }
 
     public function callToast(): void

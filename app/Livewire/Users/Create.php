@@ -100,12 +100,11 @@ class Create extends Component
     }
 
     #[On('editUser')]
-    public function edit($id): void
+    public function edit(?User $user = null): void
     {
         $this->editMode = true;
-        $this->user = User::find($id);
         Flux::modal('add-user')->show();
-        $this->setUser($this->user);
+        $this->setUser($user);
     }
 
     public function resetForm(): void
