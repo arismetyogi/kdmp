@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Users;
 
+use App\Helpers\WithToast;
 use App\Models\User;
 use Carbon\Carbon;
 use Flux\Flux;
@@ -14,7 +15,7 @@ use Livewire\WithPagination;
 #[On('users-updated')]
 class Index extends Component
 {
-    use WithPagination;
+    use WithPagination, WithToast;
 
     public
         $checked = [],
@@ -132,6 +133,7 @@ class Index extends Component
     public function delete($id): void
     {
         User::destroy($id);
+        $this->toast('User successfully deleted.', 'success');
         $this->dispatch('users-updated');
     }
 
@@ -148,8 +150,9 @@ class Index extends Component
         $this->checked = [];
     }
 
-    public function exportChecked(): \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
+    public function export(): void
     {
+        $this->toast('Exporting...', 'success');
 //        return new UsersSelectedExport($this->checked)->download('users.xlsx');
     }
 

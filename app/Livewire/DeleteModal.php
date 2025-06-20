@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Helpers\WithToast;
 use Flux\Flux;
 use Illuminate\View\View;
 use Livewire\Attributes\On;
@@ -9,6 +10,8 @@ use Livewire\Component;
 
 class DeleteModal extends Component
 {
+    use WithToast;
+
     public string $model = '';
     public array $recordIds = [];
 
@@ -23,7 +26,6 @@ class DeleteModal extends Component
     {
         $this->model = $model;
         $this->recordIds = $recordIds;
-//        dd($this->model, $this->recordIds);
     }
 
     public function delete(): void
@@ -39,7 +41,7 @@ class DeleteModal extends Component
                 $record->delete();
             }
 
-            $this->dispatch('notify', title: 'success', message: 'Data berhasil dihapus');
+            $this->toast($this->model . 'berhasil dihapus', 'success');
             // Emit an event to refresh any relevant parent components
             $this->dispatch('record-deleted', $this->recordIds);
         }

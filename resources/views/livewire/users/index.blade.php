@@ -17,7 +17,7 @@
                     <flux:select wire:model.live="selectedBranch">
                         @foreach(\App\Models\BranchOffice::all() as $branch)
                             <flux:select.option
-                                value="{{ $branch->unitbisnis_code }}">{{ substr(str()->headline($branch->name), 12,20) }}</flux:select.option>
+                                value="{{ $branch->unitbisnis_code }}">{{ substr($branch->name, 12,20) }}</flux:select.option>
                         @endforeach
                     </flux:select>
                 </div>

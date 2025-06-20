@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Users;
 
+use App\Helpers\WithToast;
 use App\Models\BranchOffice;
 use App\Models\User;
 use Flux\Flux;
@@ -15,6 +16,8 @@ use Livewire\Component;
 
 class Create extends Component
 {
+    use WithToast;
+
     public ?User $user = null;
     public
         $editMode,
@@ -26,18 +29,19 @@ class Create extends Component
         $password_confirmation;
 
     public $userId = null;
+
     public function rules(): array
     {
         return [
-            'name'      => ['required', 'min:3'],
-            'username'  => ['required', 'min:3', 'lowercase',
+            'name' => ['required', 'min:3'],
+            'username' => ['required', 'min:3', 'lowercase',
                 Rule::unique('users')->ignore($this->user)
             ],
-            'email'     => ['required', 'min:6', 'email',
+            'email' => ['required', 'min:6', 'email',
                 Rule::unique('users')->ignore($this->user)
             ],
             'unitbisnis_code' => ['nullable', 'numeric', 'exists:branch_offices,unitbisnis_code'],
-            'password'  => [
+            'password' => [
                 'nullable',
                 'confirmed:password_confirmation',
                 Password::min(8)
@@ -72,6 +76,7 @@ class Create extends Component
             }
             $user = User::create($validated);
             event(new Registered(($user)));
+            $this->toast('User successfully created.', 'success');
         } else {
             // Remove password fields if not provided
             if (empty($validated['password'])) {
@@ -80,6 +85,7 @@ class Create extends Component
                 $validated['password'] = Hash::make($validated['password']);
             }
             $this->user->update($validated);
+            $this->toast('User successfully updated.', 'success');
         }
         $this->reset();
 
@@ -88,7 +94,7 @@ class Create extends Component
         return to_route('users.index')->with('success', 'User created.');
     }
 
-    public function render():View
+    public function render(): View
     {
         return view('livewire.users.create', ['branches' => BranchOffice::all()]);
     }
