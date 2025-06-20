@@ -69,7 +69,7 @@
                                                             href="{{ route('claim-document-upload.upload', ['id' => Crypt::encryptString($uploadData->id)]) }}">
                                                 {{ __('Upload Dokumen') }}
                                             </flux:menu.item>
-                                            @if(isset($uploadData->claim->id) && ($uploadData->claim?->invoice_value - $uploadData->total) != 0)
+                                            @if(isset($uploadData->claim->id) && ($uploadData->claim->invoice_value - $uploadData->total) != 0)
                                                 <flux:menu.item icon="question-mark-circle">
                                                     Alasan Selisih
                                                 </flux:menu.item>
@@ -91,7 +91,8 @@
                             <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->translatedFormat('M-Y') }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->total }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->claim?->invoice_value }}</x-table.cell>
-                            <x-table.cell class="{{$uploadData->claim?->invoice_value - $uploadData->total != 0 ? '!text-white bg-red-500' : '' }}">{{ $uploadData->claim?->invoice_value - $uploadData->total }}</x-table.cell>
+                            <x-table.cell
+                                class="{{$uploadData->claim?->invoice_value - $uploadData->total != 0 ? '!text-white bg-red-500' : '' }}">{{ $uploadData->claim?->invoice_value - $uploadData->total }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->claim?->reason }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->claim?->notes }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->status ? 'Closed' : 'Open' }}</x-table.cell>
@@ -99,9 +100,8 @@
                     @empty
                         <tr>
                             <td colspan="15"
-                                class="text-center py-4 text-zinc-500 bg-zinc-50 dark:bg-zinc-700">There are no
-                                data
-                                found!
+                                class="text-center py-4 text-zinc-500 bg-zinc-50 dark:bg-zinc-700">
+                                There are no data found!
                             </td>
                         </tr>
                     @endforelse
