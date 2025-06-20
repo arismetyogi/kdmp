@@ -113,7 +113,7 @@ class UploadForm extends Component
             }
             $fileName = $this->unitbisnis_code . '_' . $this->invoice_number . '_' . $fileKey . '_' . now()->timestamp . '.' . $this->{$fileKey}->getClientOriginalExtension();
             $claim->addMedia($this->{$fileKey})
-                ->usingName($this->customer_id . now()->timestamp)
+                ->usingName($this->customer_id . '-' . now()->timestamp)
                 ->usingFileName($fileName)
                 ->toMediaCollection($fileKey);
         }

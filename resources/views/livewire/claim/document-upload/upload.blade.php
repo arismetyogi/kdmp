@@ -26,16 +26,28 @@
                         @php
                             $totalInvoiceValue = 0;
                         @endphp
-                        @forelse($claimDetails as $claim)
+                        @forelse($claimDetails as $claimDetail)
                             <x-table.row :even="$loop->even">
                                 <x-table.cell index>{{ $loop->iteration }}</x-table.cell>
-                                <x-table.cell>{{ $claim->invoice_number }}</x-table.cell>
+                                <x-table.cell>{{ $claimDetail->invoice_number }}</x-table.cell>
                                 <x-table.cell
-                                    class="text-end">{{ $claim->invoice_value }}</x-table.cell>
-                                <x-table.cell>{{ $claim->delivery_date }}</x-table.cell>
+                                    class="text-end">{{ $claimDetail->invoice_value }}</x-table.cell>
+                                <x-table.cell>{{ $claimDetail->delivery_date }}</x-table.cell>
                                 <x-table.cell>
-                                    @if(isset($claim->upload_invoice_file))
-                                        <flux:menu.item href="{{ $claim->getLastMediaUrl('upload_invoice_file') }}"
+                                    @if(isset($claimDetail->upload_invoice_file))
+                                        <flux:menu.item
+                                            href="{{ $claimDetail->getLastMediaUrl('upload_invoice_file') }}"
+                                            target="_blank">File
+                                            sudah diupload
+                                        </flux:menu.item>
+                                    @else
+                                        <flux:button variant="subtle" icon-trailing="document-arrow-up">Upload
+                                        </flux:button>
+                                    @endif
+                                </x-table.cell>
+                                <x-table.cell>
+                                    @if(isset($claimDetail->receipt_file))
+                                        <flux:menu.item href="{{ $claimDetail->getLastMediaUrl('receipt_file') }}"
                                                         target="_blank">File
                                             sudah diupload
                                         </flux:menu.item>
@@ -45,19 +57,8 @@
                                     @endif
                                 </x-table.cell>
                                 <x-table.cell>
-                                    @if(isset($claim->receipt_file))
-                                        <flux:menu.item href="{{ $claim->getLastMediaUrl('receipt_file') }}"
-                                                        target="_blank">File
-                                            sudah diupload
-                                        </flux:menu.item>
-                                    @else
-                                        <flux:button variant="subtle" icon-trailing="document-arrow-up">Upload
-                                        </flux:button>
-                                    @endif
-                                </x-table.cell>
-                                <x-table.cell>
-                                    @if(isset($claim->tax_invoice_file))
-                                        <flux:menu.item href="{{ $claim->getLastMediaUrl('tax_invoice_file') }}"
+                                    @if(isset($claimDetail->tax_invoice_file))
+                                        <flux:menu.item href="{{ $claimDetail->getLastMediaUrl('tax_invoice_file') }}"
                                                         target="_blank">File sudah diupload
                                         </flux:menu.item>
                                     @else
@@ -66,13 +67,17 @@
                                     @endif
                                 </x-table.cell>
                                 <x-table.cell>
-                                    <flux:button variant="filled" icon="pencil-square"
-                                                 wire:click="edit({{ $claim->id }})"></flux:button>
+                                    <div clas="flex">
+                                        <flux:button icon="pencil-square" cursor="pointer"
+                                                     wire:click="edit({{ $claimDetail->id }})"/>
+                                        <flux:button variant="filled" icon="trash" cursor="pointer"
+                                                     wire:click="$dispatch('delete-detail' , {'id': {{ $claimDetail->id }}})"/>
+                                    </div>
                                 </x-table.cell>
                             </x-table.row>
 
                             @php
-                                $totalInvoiceValue += $claim?->invoice_value;
+                                $totalInvoiceValue += $claimDetail?->invoice_value;
                             @endphp
                         @empty
                             <tr>
@@ -95,4 +100,26 @@
             </div>
         </div>
     </div>
+    <flux:modal name="delete-upload" class="min-w-[22rem]">
+        <form wire:submit="delete">
+            <div>
+                <flux:heading size="lg">Delete data?</flux:heading>
+
+                <flux:subheading>
+                    <p>You're about to delete this data.</p>
+                    <p>This action cannot be reversed.</p>
+                </flux:subheading>
+            </div>
+
+            <div class="flex gap-2 mt-4">
+                <flux:spacer/>
+
+                <flux:modal.close>
+                    <flux:button variant="ghost">Cancel</flux:button>
+                </flux:modal.close>
+
+                <flux:button type="submit" variant="danger">Delete</flux:button>
+            </div>
+        </form>
+    </flux:modal>
 </div>
