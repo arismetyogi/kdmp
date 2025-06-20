@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Claim\DocumentUpload;
 
+use App\Helpers\WithToast;
 use App\Models\Claim;
 use App\Models\ClaimDetail;
 use App\Models\ClaimUpload;
@@ -10,9 +11,12 @@ use Illuminate\View\View;
 use Livewire\Attributes\Session;
 use Livewire\Component;
 use Livewire\Mechanisms\HandleComponents\HandleComponents;
+use Livewire\WithFileUploads;
 
 class UploadForm extends Component
 {
+    use WithToast, WithFileUploads;
+
     public $id;
     public ClaimDetail $claimDetail;
     #[Session]
@@ -29,6 +33,7 @@ class UploadForm extends Component
     {
         return app(HandleComponents::class)::$componentStack[0];
     }
+
     public function mount(): void
     {
         $parent = $this->getParentComponentInstance();
@@ -41,6 +46,7 @@ class UploadForm extends Component
         $this->customer_id = $this->claimUpload->customer?->id;
         $this->period = $this->claimUpload->period;
     }
+
     public function setClaimDetail(?ClaimDetail $claimDetail = null): void
     {
         $this->claimDetail = $claimDetail;
@@ -48,6 +54,7 @@ class UploadForm extends Component
         $this->invoice_value = $claimDetail->invoice_value;
         $this->delivery_date = $claimDetail->delivery_date;
     }
+
     public function edit(?ClaimDetail $claimDetail = null): void
     {
         $this->setClaimDetail($claimDetail);
@@ -66,7 +73,6 @@ class UploadForm extends Component
             'po_customer_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
             'receipt_order_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
             'customer_tracking_number' => 'required|string',
-            'updated_by' => 'required',
         ];
     }
 
@@ -81,17 +87,6 @@ class UploadForm extends Component
             'unitbisnis_code' => 'required',
             'invoice_value' => 'required',
         ]);
-
-        foreach (['upload_invoice_file', 'receipt_file', 'tax_invoice_file', 'receipt_order_file', 'po_customer_file'] as $fileKey) {
-            if ($request->hasFile($fileKey)) {
-                $file = $request->file($fileKey);
-                $fileName = $this->unitbisnis_code . '-' . $this->customer_id . '-' . $file->getClientOriginalName();
-                $detil[$fileKey] = $file->storePubliclyAs(
-                    'claims/docs/' . date('Y/m'),
-                    $fileName
-                );
-            }
-        }
 
         $uploadId = $this->upload_id;
         $detil['upload_id'] = $uploadId;
@@ -111,12 +106,20 @@ class UploadForm extends Component
         } else {
             Claim::create($rekap);
         }
+        $claim = ClaimDetail::create($detil);
 
-        ClaimDetail::create($detil);
+        foreach (['upload_invoice_file', 'receipt_file', 'tax_invoice_file', 'receipt_order_file', 'po_customer_file'] as $fileKey) {
+            $fileName = $this->unitbisnis_code . '-' . $this->customer_id;
+//            dd($fileKey);
+            $claim->addMedia($this->{$fileKey})
+                ->toMediaCollection($fileKey);
+        }
+
         $this->resetForm();
 
+        $this->toast('Detil klaim berhasil ditambahkan', 'success');
         $this->dispatch('refresh-details');
-        return back()->with('success', 'Upload Berhasil !!');
+        return back();
     }
 
     public function render(): View
@@ -124,7 +127,7 @@ class UploadForm extends Component
         return view('livewire.claim.document-upload.upload-form');
     }
 
-    public function resetForm()
+    public function resetForm(): void
     {
         $this->resetExcept('claimUpload');
     }

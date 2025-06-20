@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
-use NumberFormatter;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +23,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Model::unguard();
+        Model::shouldBeStrict(!$this->app->isProduction());
+        Model::automaticallyEagerLoadRelationships();
+
+        DB::prohibitDestructiveCommands($this->app->isProduction());
+
+        Date::useClass(CarbonImmutable::class);
     }
 }

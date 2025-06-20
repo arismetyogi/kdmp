@@ -35,27 +35,36 @@
                                 <x-table.cell>{{ $claim->delivery_date }}</x-table.cell>
                                 <x-table.cell>
                                     @if(isset($claim->upload_invoice_file))
-                                        <flux:menu.item href="#">File sudah diupload</flux:menu.item>
+                                        <flux:menu.item href="{{ $claim->getFirstMediaUrl('upload_invoice_file') }}"
+                                                        target="_blank">File
+                                            sudah diupload
+                                        </flux:menu.item>
                                     @else
-                                        <flux:button variant="subtle" icon-trailing="document-arrow-up">Upload</flux:button>
+                                        <flux:button variant="subtle" icon-trailing="document-arrow-up">Upload
+                                        </flux:button>
                                     @endif
                                 </x-table.cell>
                                 <x-table.cell>
                                     @if(isset($claim->receipt_file))
-                                        <flux:menu.item href="#">File sudah diupload</flux:menu.item>
+                                        <flux:menu.item href="{{ $claim->getFirstMediaUrl() }}" target="_blank">File
+                                            sudah diupload
+                                        </flux:menu.item>
                                     @else
-                                        <flux:button variant="subtle" icon-trailing="document-arrow-up">Upload</flux:button>
+                                        <flux:button variant="subtle" icon-trailing="document-arrow-up">Upload
+                                        </flux:button>
                                     @endif
                                 </x-table.cell>
                                 <x-table.cell>
                                     @if(isset($claim->tax_invoice_file))
                                         <flux:menu.item href="#">File sudah diupload</flux:menu.item>
                                     @else
-                                        <flux:button variant="subtle" icon-trailing="document-arrow-up">Upload</flux:button>
+                                        <flux:button variant="subtle" icon-trailing="document-arrow-up">Upload
+                                        </flux:button>
                                     @endif
                                 </x-table.cell>
                                 <x-table.cell>
-                                    <flux:button variant="filled" icon="pencil-square" wire:click="edit({{ $claim->id }})"></flux:button>
+                                    <flux:button variant="filled" icon="pencil-square"
+                                                 wire:click="edit({{ $claim->id }})"></flux:button>
                                 </x-table.cell>
                             </x-table.row>
 
