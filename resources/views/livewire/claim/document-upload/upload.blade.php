@@ -35,7 +35,7 @@
                                 <x-table.cell>{{ $claim->delivery_date }}</x-table.cell>
                                 <x-table.cell>
                                     @if(isset($claim->upload_invoice_file))
-                                        <flux:menu.item href="{{ $claim->getFirstMediaUrl('upload_invoice_file') }}"
+                                        <flux:menu.item href="{{ $claim->getLastMediaUrl('upload_invoice_file') }}"
                                                         target="_blank">File
                                             sudah diupload
                                         </flux:menu.item>
@@ -46,7 +46,8 @@
                                 </x-table.cell>
                                 <x-table.cell>
                                     @if(isset($claim->receipt_file))
-                                        <flux:menu.item href="{{ $claim->getFirstMediaUrl() }}" target="_blank">File
+                                        <flux:menu.item href="{{ $claim->getLastMediaUrl('receipt_file') }}"
+                                                        target="_blank">File
                                             sudah diupload
                                         </flux:menu.item>
                                     @else
@@ -56,7 +57,9 @@
                                 </x-table.cell>
                                 <x-table.cell>
                                     @if(isset($claim->tax_invoice_file))
-                                        <flux:menu.item href="#">File sudah diupload</flux:menu.item>
+                                        <flux:menu.item href="{{ $claim->getLastMediaUrl('tax_invoice_file') }}"
+                                                        target="_blank">File sudah diupload
+                                        </flux:menu.item>
                                     @else
                                         <flux:button variant="subtle" icon-trailing="document-arrow-up">Upload
                                         </flux:button>

@@ -70,7 +70,7 @@
                             <x-table.cell>
                                 <div class="flex items-center gap-2">
                                     <flux:avatar circle color="auto" color:seed="{{ $user->id }}"
-                                                 src="{{ $user->avatar }}"
+                                                 src="{{ $user->avatar ?? '' }}"
                                                  name="{{ $user->name }}"
                                                  badge badge:circle
                                                  :badge:color="$this->sessions->firstWhere('user_id', $user->id) ? 'emerald' : 'orange'"
