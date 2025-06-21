@@ -70,7 +70,8 @@
                                                 {{ __('Upload Dokumen') }}
                                             </flux:menu.item>
                                             @if(isset($uploadData->claim->id) && ($uploadData->claim->invoice_value - $uploadData->total) != 0)
-                                                <flux:menu.item icon="question-mark-circle">
+                                                <flux:menu.item icon="question-mark-circle"
+                                                                wire:click="setReason({{ $uploadData->claim->id }})">
                                                     Alasan Selisih
                                                 </flux:menu.item>
                                             @endif
@@ -93,7 +94,7 @@
                             <x-table.cell>{{ $uploadData->claim?->invoice_value }}</x-table.cell>
                             <x-table.cell
                                 class="{{$uploadData->claim?->invoice_value - $uploadData->total != 0 ? '!text-white bg-red-500' : '' }}">{{ $uploadData->claim?->invoice_value - $uploadData->total }}</x-table.cell>
-                            <x-table.cell>{{ $uploadData->claim?->reason }}</x-table.cell>
+                            <x-table.cell>{{ \App\Enums\Reasons::fromName($uploadData->claim?->reason) ?? '' }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->claim?->notes }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->status ? 'Closed' : 'Open' }}</x-table.cell>
                         </x-table.row>
@@ -145,6 +146,31 @@
                 </flux:modal.close>
 
                 <flux:button type="submit" variant="danger">Delete</flux:button>
+            </div>
+        </form>
+    </flux:modal>
+
+    <flux:modal name="set-reason" class="w-[20-rem]">
+        <form wire:submit="updateReason">
+            <flux:heading>Input Alasan Selisih</flux:heading>
+            <flux:separator></flux:separator>
+            <div>
+                <flux:select label="Alasan" wire:model="reason">
+                    <flux:select.option value="" selected hidden>Pilih Alasan</flux:select.option>
+                    @foreach(\App\Enums\Reasons::cases() as $reason)
+                        <flux:select.option value="{{ $reason->name }}">{{ $reason->value }}</flux:select.option>
+                    @endforeach
+                </flux:select>
+                <flux:textarea label="Keterangan" wire:model="notes"/>
+            </div>
+            <div class="flex gap-2 mt-4">
+                <flux:spacer/>
+
+                <flux:modal.close>
+                    <flux:button variant="ghost">Cancel</flux:button>
+                </flux:modal.close>
+
+                <flux:button type="submit">Submit</flux:button>
             </div>
         </form>
     </flux:modal>

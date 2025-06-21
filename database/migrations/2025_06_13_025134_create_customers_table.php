@@ -21,9 +21,8 @@ return new class extends Migration {
             $table->string('insurer_id')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
             $table->foreign('deleted_by')->references('id')->on('users');
-            $table->unsignedBigInteger('updated_by')->nullable();
-            $table->foreign('updated_by')->references('id')->on('users');
-            $table->foreignId('user_id');
+            $table->bigInteger('updated_by')->nullable();
+            $table->bigInteger('user_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -2,9 +2,13 @@
 
 namespace App\Livewire\Claim\DocumentUpload;
 
+use App\Helpers\WithToast;
 use App\Models\BranchOffice;
+use App\Models\Claim;
+use App\Models\ClaimDetail;
 use App\Models\ClaimUpload;
 use Carbon\Carbon;
+use Flux\Flux;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Session;
@@ -14,7 +18,7 @@ use Livewire\WithPagination;
 #[Layout('components.layouts.app')]
 class Index extends Component
 {
-    use WithPagination;
+    use WithPagination, WithToast;
 
     public $perPage = 10;
     #[Session]
@@ -88,5 +92,25 @@ class Index extends Component
     public function updatedSearch(): void
     {
         $this->resetPage();
+    }
+
+    public ?Claim $claim = null;
+    public function setReason(?Claim $claim = null): void
+    {
+        $this->claim = $claim;
+        $this->dispatch('set-reason', $claim);
+        Flux::modal('set-reason')->show();
+    }
+
+    public $reason, $notes;
+
+    public function updateReason(): void
+    {
+        $this->claim->update([
+            'reason' => $this->reason,
+            'notes' => $this->notes
+        ]);
+        $this->toast('Alasan berhasil diperbaharui');
+        Flux::modal('set-reason')->close();
     }
 }
