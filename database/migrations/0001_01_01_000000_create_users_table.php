@@ -17,8 +17,9 @@ return new class extends Migration {
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('unitbisnis_code')->nullable();
-            $table->integer('role_id')->unsigned()->nullable();
+            $table->integer('unitbisnis_code')->nullable();
+            $table->foreign('unitbisnis_code')->references('unitbisnis_code')->on('branch_offices');
+            $table->foreignId('role_id')->constrained();
             $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();

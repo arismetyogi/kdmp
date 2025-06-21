@@ -18,8 +18,9 @@ return new class extends Migration {
             $table->bigInteger('commercial_value')->nullable();
             $table->bigInteger('tax_value')->nullable();
             $table->bigInteger('total')->nullable();
-            $table->foreignId('unitbisnis_code')->nullable();
-            $table->foreignId('user_id')->nullable();
+            $table->integer('unitbisnis_code')->nullable();
+            $table->foreign('unitbisnis_code')->references('unitbisnis_code')->on('branch_offices');
+            $table->foreignId('user_id')->constrained();
             $table->string('period')->nullable();
             $table->boolean('is_valid')->default(false);
             $table->string('batch_id')->nullable();

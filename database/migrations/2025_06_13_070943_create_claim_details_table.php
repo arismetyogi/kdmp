@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('claim_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('upload_id')->nullable();
+            $table->unsignedBigInteger('upload_id');
+            $table->foreign('upload_id')->references('id')->on('claim_uploads');
             $table->string('invoice_number')->nullable();
             $table->integer('invoice_value')->nullable();
             $table->string('delivery_date')->nullable();
@@ -24,7 +25,8 @@ return new class extends Migration
             $table->string('po_customer_file')->nullable();
             $table->string('receipt_order_file')->nullable();
             $table->string('customer_tracking_number')->nullable();
-            $table->string('updated_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->foreign('updated_by')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();
         });

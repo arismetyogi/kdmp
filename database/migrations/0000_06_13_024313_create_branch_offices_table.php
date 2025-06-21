@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('branch_offices', function (Blueprint $table) {
             $table->id();
-            $table->integer('unitbisnis_code')->nullable();
+            $table->integer('unitbisnis_code')->index();
             $table->string('name')->nullable();
             $table->string('alamat_bm')->nullable();
             $table->string('flag')->nullable();

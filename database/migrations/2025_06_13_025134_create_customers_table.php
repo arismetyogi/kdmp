@@ -18,10 +18,12 @@ return new class extends Migration {
             $table->string('area_code')->nullable();
             $table->string('area_code_description')->nullable();
             $table->string('customer_name')->nullable();
-            $table->integer('insurer_id')->nullable();
-            $table->integer('deleted_by')->nullable();
-            $table->integer('updated_by')->nullable();
-            $table->foreignId('user_id')->nullable();
+            $table->string('insurer_id')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users');
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->foreign('updated_by')->references('id')->on('users');
+            $table->foreignId('user_id');
             $table->timestamps();
             $table->softDeletes();
         });
