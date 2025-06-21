@@ -65,7 +65,7 @@
                                     </flux:button>
                                     <flux:menu>
                                         <flux:menu.group>
-                                            <flux:menu.item class="cursor-pointer" icon="document-arrow-up"
+                                            <flux:menu.item class="cursor-pointer" icon="document-arrow-up" wire:navigate
                                                             href="{{ route('claim-document-upload.upload', ['id' => Crypt::encryptString($uploadData->id)]) }}">
                                                 {{ __('Upload Dokumen') }}
                                             </flux:menu.item>

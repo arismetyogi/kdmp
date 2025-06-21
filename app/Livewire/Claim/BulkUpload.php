@@ -168,14 +168,4 @@ class BulkUpload extends Component
             ->paginate($this->perPage);
         return view('livewire.claim.bulk-upload', compact('claimUploads'));
     }
-
-    public function callToast(): void
-    {
-        $this->toast(message: 'Toast Message', type: 'success');
-    }
-
-    public function callToastError(): void
-    {
-        $this->toast(message: 'Toast Error Message', type: 'danger');
-    }
 }

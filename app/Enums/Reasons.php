@@ -6,14 +6,14 @@ enum Reasons: string
 {
     case APOTEK = 'Apotek belum kirim alat tagih';
     case BM = 'BM belum tanda tangan alat tagih';
-    case POS = 'Perbedean bulan transaksi POS dengan bulan klaim';
+    case POS = 'Perbedaan bulan transaksi POS dengan bulan klaim';
 
     public static function labels(): array
     {
         return [
             self::APOTEK->value => 'Apotek belum kirim alat tagih',
             self::BM->value => 'BM belum tanda tangan alat tagih',
-            self::POS->value => 'Perbedean bulan transaksi POS dengan bulan klaim',
+            self::POS->value => 'Perbedaan bulan transaksi POS dengan bulan klaim',
         ];
     }
 

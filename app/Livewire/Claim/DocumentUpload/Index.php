@@ -110,7 +110,7 @@ class Index extends Component
             'reason' => $this->reason,
             'notes' => $this->notes
         ]);
-        $this->toast('Alasan berhasil diperbaharui');
+        $this->toast('Alasan berhasil diperbaharui', 'success');
         Flux::modal('set-reason')->close();
     }
 }

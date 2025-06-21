@@ -27,8 +27,6 @@
                     </flux:button>
                     <flux:button variant="filled" class="w-full" href="files/claim_uploads.xlsx"
                                  icon:trailing="arrow-up-right"> {{ __('Download Template') }}</flux:button>
-                    <flux:button wire:click="callToast">Call Toast</flux:button>
-                    <flux:button wire:click="callToastError">Call Toast2</flux:button>
                 </div>
             </form>
         </div>

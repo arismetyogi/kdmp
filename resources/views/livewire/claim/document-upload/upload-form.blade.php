@@ -40,6 +40,9 @@
             <flux:button type="submit" variant="primary">
                 {{ __('Submit') }}
             </flux:button>
+
+            <flux:spacer/>
+            <flux:button href="{{ route('claim-document-upload.index') }}" variant="danger" icon="arrow-uturn-left" wire:navigate>Kembali</flux:button>
         </div>
     </form>
 </div>
