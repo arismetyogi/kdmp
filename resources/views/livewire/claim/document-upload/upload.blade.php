@@ -64,7 +64,7 @@
                                 <x-table.cell>
                                     <div clas="flex">
                                         <flux:button icon="pencil-square" cursor="pointer"
-                                                     wire:click="edit({{ $claimDetail->id }})"/>
+                                                     wire:click="editDetail({{ $claimDetail->id }})"/>
                                         <flux:button variant="filled" icon="trash" cursor="pointer"
                                                      wire:click="$dispatch('delete-detail' , {'id': {{ $claimDetail->id }}})"/>
                                     </div>

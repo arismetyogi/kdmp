@@ -7,10 +7,13 @@ use App\Models\Claim;
 use App\Models\ClaimDetail;
 use App\Models\ClaimUpload;
 use Illuminate\View\View;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Session;
 use Livewire\Component;
 use Livewire\Mechanisms\HandleComponents\HandleComponents;
 use Livewire\WithFileUploads;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class UploadForm extends Component
 {
@@ -49,11 +52,20 @@ class UploadForm extends Component
     public function setClaimDetail(?ClaimDetail $claimDetail = null): void
     {
         $this->claimDetail = $claimDetail;
+        $this->invoice_date = $claimDetail->invoice_date;
         $this->invoice_number = $claimDetail->invoice_number;
         $this->invoice_value = $claimDetail->invoice_value;
         $this->delivery_date = $claimDetail->delivery_date;
+        $this->customer_tracking_number = $claimDetail->customer_tracking_number;
+
+        $this->upload_invoice_file = $claimDetail->upload_invoice_file;
+        $this->tax_invoice_file = $claimDetail->tax_invoice_file;
+        $this->receipt_file = $claimDetail->receipt_file;
+        $this->po_customer_file = $claimDetail->po_customer_file;
+        $this->receipt_order_file = $claimDetail->receipt_order_file;
     }
 
+    #[On('edit-detail')]
     public function edit(?ClaimDetail $claimDetail = null): void
     {
         $this->setClaimDetail($claimDetail);
@@ -75,6 +87,10 @@ class UploadForm extends Component
         ];
     }
 
+    /**
+     * @throws FileIsTooBig
+     * @throws FileDoesNotExist
+     */
     public function save(): \Illuminate\Http\RedirectResponse
     {
         $invoiceValue = str_replace([',', '.'], '', $this->invoice_value);

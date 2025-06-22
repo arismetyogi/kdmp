@@ -50,7 +50,7 @@ class Upload extends Component
         Flux::modal('delete-upload')->show();
     }
 
-    public function delete()
+    public function delete(): void
     {
         $this->claim = Claim::where('upload_id', $this->claimDetail->upload_id)->first();
         $this->claim->update(['invoice_value' => $this->claim->invoice_value - $this->claimDetail->invoice_value]);
@@ -58,5 +58,11 @@ class Upload extends Component
         $this->claimDetail->delete();
         Flux::modal('delete-upload')->close();
         $this->toast('Data klaim berhasil dihapus', 'success');
+    }
+
+    public function editDetail(?ClaimDetail $claimDetail = null): void
+    {
+        $this->claimDetail = $claimDetail;
+        $this->dispatch('edit-detail', [$this->claimDetail]);
     }
 }
