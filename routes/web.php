@@ -6,6 +6,7 @@ use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Users;
+use App\Livewire\Customers;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', 'login')->name('home');
@@ -18,6 +19,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('is_admin:99')->group(function () {
         Route::get('upload-penjamin', BulkUpload::class)->name('claim-upload');
         Route::get('users', Users\Index::class)->name('users.index');
+        Route::get('customers', Customers\Index::class)->name('customers.index');
     });
 });
 
