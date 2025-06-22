@@ -91,9 +91,9 @@
                             </x-table.cell>
                             <x-table.cell>{{ \Carbon\Carbon::parse($uploadData->period)->translatedFormat('M-Y') }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->total }}</x-table.cell>
-                            <x-table.cell>{{ $uploadData->claim?->invoice_value }}</x-table.cell>
+                            <x-table.cell>{{ $uploadData->claimDetails?->sum('invoice_value') }}</x-table.cell>
                             <x-table.cell
-                                class="{{$uploadData->claim?->invoice_value - $uploadData->total != 0 ? '!text-white bg-red-500' : '' }}">{{ $uploadData->claim?->invoice_value - $uploadData->total }}</x-table.cell>
+                                class="{{ $uploadData->claimDetails?->sum('invoice_value') - $uploadData->total != 0 ? '!text-white bg-red-500' : '' }}">{{ $uploadData->claimDetails?->sum('invoice_value') - $uploadData->total }}</x-table.cell>
                             <x-table.cell>{{ \App\Enums\Reasons::fromName($uploadData->claim?->reason) ?? '' }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->claim?->notes }}</x-table.cell>
                             <x-table.cell>{{ $uploadData->status ? 'Closed' : 'Open' }}</x-table.cell>

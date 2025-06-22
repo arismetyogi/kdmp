@@ -6,6 +6,7 @@ use App\Helpers\WithToast;
 use App\Models\Claim;
 use App\Models\ClaimDetail;
 use App\Models\ClaimUpload;
+use DB;
 use Illuminate\View\View;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Session;
@@ -21,7 +22,7 @@ class UploadForm extends Component
 
     public $id;
 
-    public ClaimDetail $claimDetail;
+    public ?ClaimDetail $claimDetail = null;
 
     #[Session]
     public ClaimUpload $claimUpload;
@@ -70,6 +71,7 @@ class UploadForm extends Component
 
     public function mount(): void
     {
+        //        dd($this->getparentcomponentinstance());
         $parent = $this->getParentComponentInstance();
         $this->id = $parent->id;
         $this->upload_id = $parent->id;
@@ -109,12 +111,32 @@ class UploadForm extends Component
             'upload_id' => 'required',
             'invoice_number' => 'required|string',
             'invoice_date' => 'required|date',
-            'upload_invoice_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
-            'tax_invoice_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'upload_invoice_file' => function () {
+                return $this->upload_invoice_file instanceof \Illuminate\Http\UploadedFile
+                    ? 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240'
+                    : 'nullable';
+            },
+            'tax_invoice_file' => function () {
+                return $this->upload_invoice_file instanceof \Illuminate\Http\UploadedFile
+                    ? 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240'
+                    : 'nullable';
+            },
             'delivery_date' => 'nullable|date',
-            'receipt_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
-            'po_customer_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
-            'receipt_order_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'receipt_file' => function () {
+                return $this->upload_invoice_file instanceof \Illuminate\Http\UploadedFile
+                    ? 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240'
+                    : 'nullable';
+            },
+            'po_customer_file' => function () {
+                return $this->upload_invoice_file instanceof \Illuminate\Http\UploadedFile
+                    ? 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240'
+                    : 'nullable';
+            },
+            'receipt_order_file' => function () {
+                return $this->upload_invoice_file instanceof \Illuminate\Http\UploadedFile
+                    ? 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240'
+                    : 'nullable';
+            },
             'customer_tracking_number' => 'nullable|string',
         ];
     }
@@ -122,6 +144,7 @@ class UploadForm extends Component
     /**
      * @throws FileIsTooBig
      * @throws FileDoesNotExist
+     * @throws \Throwable
      */
     public function save(): \Illuminate\Http\RedirectResponse
     {
@@ -147,28 +170,47 @@ class UploadForm extends Component
         // ! check
         $rekap['value'] = $this->claimUpload->total;
 
-        $claimExist = Claim::where('upload_id', $uploadId)->first();
-        if ($claimExist) {
-            $claimExist->update(['invoice_value' => $claimExist->invoice_value + $detil['invoice_value']]);
-        } else {
-            Claim::create($rekap);
-        }
-        $claim = ClaimDetail::create($detil);
+        DB::beginTransaction();
+        try {
 
-        foreach (['upload_invoice_file', 'receipt_file', 'tax_invoice_file', 'receipt_order_file', 'po_customer_file'] as $fileKey) {
-            if (! isset($this->{$fileKey}) || ! $this->{$fileKey}) {
-                continue; // skip if the file is not uploaded
+            if (!$this->claimDetail) {
+                $claimDetail = ClaimDetail::create($detil);
+                $this->toast('Detil klaim berhasil ditambahkan!', 'success');
+            } else {
+                $this->claimDetail->update($detil); //returns bool
+                $claimDetail = $this->claimDetail->refresh(); // retrieve claimDetail model instance
+                $this->toast('Detil klaim berhasil diperbaharui!', 'success');
             }
-            $fileName = $this->unitbisnis_code.'_'.$this->invoice_number.'_'.$fileKey.'_'.now()->timestamp.'.'.$this->{$fileKey}->getClientOriginalExtension();
-            $claim->addMedia($this->{$fileKey})
-                ->usingName($this->customer_id.'-'.now()->timestamp)
-                ->usingFileName($fileName)
-                ->toMediaCollection($fileKey);
+
+            foreach (['upload_invoice_file', 'receipt_file', 'tax_invoice_file', 'receipt_order_file', 'po_customer_file'] as $fileKey) {
+                if (!isset($this->{$fileKey}) || !$this->{$fileKey}) {
+                    continue; // skip if the file is not uploaded
+                }
+                if ($this->{$fileKey} instanceof \Illuminate\Http\UploadedFile) {
+                    $fileName = $this->unitbisnis_code . '_' . $this->invoice_number . '_' . $fileKey . '_' . now()->timestamp . '.' . $this->{$fileKey}->getClientOriginalExtension();
+                    $claimDetail->addMedia($this->{$fileKey})
+                        ->usingName($this->customer_id . '-' . now()->timestamp)
+                        ->usingFileName($fileName)
+                        ->toMediaCollection($fileKey);
+                }
+            }
+
+            $claimExist = Claim::where('upload_id', $uploadId)->first();
+            if ($claimExist) {
+                $claimExist->update(['invoice_value' => $claimExist->invoice_value + $detil['invoice_value']]);
+            } else {
+                Claim::create($rekap);
+            }
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            $this->toast('Terjadi kesalahan saat memproses data: ' . $e->getMessage(), 'danger');
+            return back();
         }
+
 
         $this->resetForm();
 
-        $this->toast('Detil klaim berhasil ditambahkan', 'success');
         $this->dispatch('refresh-details');
 
         return back();
@@ -181,6 +223,6 @@ class UploadForm extends Component
 
     public function resetForm(): void
     {
-        $this->resetExcept('claimUpload');
+        $this->resetExcept(['claimUpload', 'upload_id', 'unitbisnis_code', 'customer_id', 'period']);
     }
 }
