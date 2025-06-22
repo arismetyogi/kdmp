@@ -8,10 +8,10 @@
             <flux:input label="Tanggal Invoice" wire:model="invoice_date" name="invoice_date" type="date"/>
             <flux:input label="Upload Invoice" wire:model="upload_invoice_file" name="upload_invoice_file"
                         type="file" :required="false"
-                        accept=".pdf,.jpg,.jpeg"/>
+                        accept=".pdf,.jpg,.jpeg,.png"/>
             <flux:input label="Upload Faktur Pajak" wire:model="tax_invoice_file" name="tax_invoice_file"
                         type="file" :required="false"
-                        accept=".pdf,.jpg,.jpeg"/>
+                        accept=".pdf,.jpg,.jpeg,.png"/>
             <flux:input.group label="Nominal Invoice">
                 <flux:input.group.prefix>Rp</flux:input.group.prefix>
                 <flux:input wire:model="invoice_value" name="invoice_value" type="text"
@@ -21,15 +21,15 @@
                         type="date"/>
             <flux:input label="Bukti Kirim Tanda Terima Alat Tagih" wire:model="receipt_file"
                         name="receipt_file" type="file" :required="false"
-                        accept=".pdf,.jpg,.jpeg"/>
+                        accept=".pdf,.jpg,.jpeg,.png"/>
             <flux:input label="Nomor Tracking Customer" wire:model="customer_tracking_number"
                         name="customer_tracking_number" type="text"/>
             <flux:input label="Upload PO Customer" wire:model="po_customer_file"
                         name="po_customer_file" type="file" :required="false"
-                        accept=".pdf,.jpg,.jpeg"/>
+                        accept=".pdf,.jpg,.jpeg,.png"/>
             <flux:input label="Upload BA Penyerahan Barang" wire:model="receipt_order_file"
                         name="receipt_order_file" type="file" :required="false"
-                        accept=".pdf,.jpg,.jpeg"/>
+                        accept=".pdf,.jpg,.jpeg,.png"/>
         </div>
 
         <div class="flex gap-2">
