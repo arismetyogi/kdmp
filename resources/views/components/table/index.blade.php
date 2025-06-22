@@ -1,6 +1,6 @@
-<div class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg">
+<div class="align-middle min-w-full overflow-x-auto shadow overflow-auto sm:rounded-lg max-h-[500px]">
     <table class="min-w-full border-collapse">
-        <thead>
+        <thead  class="sticky top-0 z-10">
         <tr>
             {{ $head }}
         </tr>

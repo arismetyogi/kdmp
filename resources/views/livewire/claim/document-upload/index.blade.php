@@ -32,9 +32,9 @@
                 </div>
                 <flux:button type="primary" wire:click="export">Export</flux:button>
             </div>
-            <div wire:model.live="perPage" class="flex gap-2 items-center">
+            <div class="flex gap-2 items-center">
                 <label for="perPage">per Page:</label>
-                <select id="perPage"
+                <select wire:model.live="perPage" id="perPage"
                         class="border px-2 py-1 border-zinc-300 dark:border-zinc-500 dark:bg-zinc-700 rounded">
                     <option value="10">10</option>
                     <option value="25">25</option>
@@ -110,9 +110,9 @@
             </x-table.index>
             <div
                 class="flex flex-wrap items-center justify-between py-4 space-y-4 flex-column md:flex-row md:space-y-0">
-                <div wire:model.live="perPage" class="flex gap-2 items-center">
+                <div class="flex gap-2 items-center">
                     <label for="perPage">per Page:</label>
-                    <select id="perPage"
+                    <select wire:model.live="perPage" id="perPage"
                             class="border px-2 py-1 border-zinc-300 dark:border-zinc-500 dark:bg-zinc-700 rounded">
                         <option value="10">10</option>
                         <option value="25">25</option>
