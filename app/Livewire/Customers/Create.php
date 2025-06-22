@@ -6,6 +6,7 @@ use App\Helpers\WithToast;
 use App\Models\Customer;
 use Flux\Flux;
 use Illuminate\View\View;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Create extends Component
@@ -14,9 +15,10 @@ class Create extends Component
 
     public ?Customer $customer = null;
 
+    public $editMode;
     public $name;
     public $code;
-    public $segmen_standardisasi;
+    public $segmen_standarisasi;
     public $area_code;
     public $area_code_description;
     public $customer_name;
@@ -27,8 +29,8 @@ class Create extends Component
         return [
             'name' => 'required|string|min:3|max:255',
             'code' => 'required|int|digits:8',
-            'segmen_standardisasi' => 'nullable|string|min:3|max:255',
-            'area_code' => 'required|string|digits:8',
+            'segmen_standarisasi' => 'nullable|string|min:3|max:255',
+            'area_code' => 'required|string',
             'area_code_description' => 'nullable|string|min:4|max:4',
             'customer_name' => 'required|string|min:3|max:255',
             'insurer_id' => 'nullable|string',
@@ -41,16 +43,17 @@ class Create extends Component
 
         $this->name = $customer->name;
         $this->code = $customer->code;
-        $this->segmen_standardisasi = $customer->segmen_standarisasi;
+        $this->segmen_standarisasi = $customer->segmen_standarisasi;
         $this->area_code = $customer->area_code;
         $this->area_code_description = $customer->area_code_description;
+        $this->customer_name = $customer->name;
         $this->insurer_id = $customer->insurer_id;
     }
 
     public function save(): void
     {
+        $this->customer_name = $this->name . '-' . $this->area_code;
         $validated = $this->validate();
-        $validated['customer_name'] = $this->name . '-' . $this->area_code;
 
         if (!$this->customer) {
             Customer::create($validated);
@@ -68,5 +71,18 @@ class Create extends Component
     public function render(): View
     {
         return view('livewire.customers.create');
+    }
+
+    #[On('editCustomer')]
+    public function edit(?Customer $customer = null): void
+    {
+        $this->editMode = true;
+        Flux::modal('add-user')->show();
+        $this->setCustomer($customer);
+    }
+
+    public function resetForm(): void
+    {
+        $this->customer = null;
     }
 }

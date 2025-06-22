@@ -1,7 +1,7 @@
 <div>
     <flux:modal name="add-customer" :show="$errors->isNotEmpty() || $customer" :dismissible="false"
                 @close="resetForm()"
-                class="max-w-lg space-y-6">
+                class="w-250 max-w-lg space-y-6">
         <form wire:submit="save">
             <div>
                 <flux:heading size="lg">
@@ -23,7 +23,7 @@
                 <flux:input label="Kode Penjamin SAP" placeholder="012345678" wire:model.blur="code"/>
                 <flux:input label="Kode Area" placeholder="KFD0" wire:model.blur="area_code_description"/>
                 <flux:input label="Deskripsi Kode Area" placeholder="Default" wire:model.blur="area_code"/>
-                <flux:input label="Kode Penjamin SS" placeholder="Default" wire:model.blur="insurer_id"/>
+                <flux:input label="Kode Penjamin SS" placeholder="34512" wire:model.blur="insurer_id"/>
             </div>
 
             <div class="flex gap-2">

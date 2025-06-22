@@ -62,7 +62,7 @@
                                     <flux:button icon-trailing="chevron-down">Action</flux:button>
                                     <flux:menu>
                                         <flux:modal.trigger name="add-customer"
-                                                            wire:click="editcustomer({{ $customer->id }})">
+                                                            wire:click="editCustomer({{ $customer->id }})">
                                             <flux:menu.item icon="pencil" class="cursor-pointer">Edit</flux:button>
                                         </flux:modal.trigger>
 
