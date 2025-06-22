@@ -24,6 +24,10 @@
                                    :current="request()->routeIs('claim-upload')"
                                    wire:navigate>{{ __('Upload Template') }}</flux:navlist.item>
                 <flux:navmenu.separator/>
+                <flux:navlist.item icon="briefcase" :href="route('customers.index')"
+                                   :current="request()->routeIs('customers.index')"
+                                   wire:navigate>{{ __('Data Penjamin') }}</flux:navlist.item>
+                <flux:navmenu.separator/>
                 <flux:navlist.item icon="users" :href="route('users.index')"
                                    :current="request()->routeIs('users.index')"
                                    wire:navigate>{{ __('Data User') }}</flux:navlist.item>
@@ -40,13 +44,13 @@
     </flux:radio.group>
 
     <flux:navlist variant="outline">
-        <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-            {{ __('Repository') }}
-        </flux:navlist.item>
+{{--        <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">--}}
+{{--            {{ __('Repository') }}--}}
+{{--        </flux:navlist.item>--}}
 
-        <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-            {{ __('Documentation') }}
-        </flux:navlist.item>
+{{--        <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">--}}
+{{--            {{ __('Documentation') }}--}}
+{{--        </flux:navlist.item>--}}
     </flux:navlist>
 
     <!-- Desktop User Menu -->
