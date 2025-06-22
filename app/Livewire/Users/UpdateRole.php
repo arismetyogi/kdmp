@@ -15,7 +15,14 @@ class UpdateRole extends Component
     use WithToast;
 
     public ?User $user = null;
-    public $name, $email, $unitbisnis_code, $role_id;
+
+    public $name;
+
+    public $email;
+
+    public $unitbisnis_code;
+
+    public $role_id;
 
     public function mount(?User $user = null): void
     {
@@ -25,7 +32,7 @@ class UpdateRole extends Component
     public function rules(): array
     {
         return [
-            'role_id' => ['required', 'numeric', 'exists:roles,id']
+            'role_id' => ['required', 'numeric', 'exists:roles,id'],
         ];
     }
 
@@ -55,6 +62,7 @@ class UpdateRole extends Component
         $this->toast('Roles berhasil diupdate!', 'success');
 
         Flux::modal('edit-role')->close();
+
         return back();
     }
 

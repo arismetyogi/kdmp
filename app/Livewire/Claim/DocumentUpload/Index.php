@@ -5,7 +5,6 @@ namespace App\Livewire\Claim\DocumentUpload;
 use App\Helpers\WithToast;
 use App\Models\BranchOffice;
 use App\Models\Claim;
-use App\Models\ClaimDetail;
 use App\Models\ClaimUpload;
 use Carbon\Carbon;
 use Flux\Flux;
@@ -21,13 +20,19 @@ class Index extends Component
     use WithPagination, WithToast;
 
     public $perPage = 10;
+
     #[Session]
     public $userUBCode;
+
     #[Session]
     public ?string $unitBisnisCode = null;
+
     public $periods;
+
     #[Session]
-    public $period, $search;
+    public $period;
+
+    public $search;
 
     public function mount(): void
     {
@@ -44,7 +49,7 @@ class Index extends Component
 
         $query = ClaimUpload::with('branch')
             ->whereBetween('period', [$startDate, $endDate])
-            ->when($this->search, fn($query, $search) => $query
+            ->when($this->search, fn ($query, $search) => $query
                 ->whereAny(['customer_name'], 'like', "%{$search}%")
             )
             ->latest();
@@ -54,6 +59,7 @@ class Index extends Component
         } else {
             $query->where('unitbisnis_code', $this->unitBisnisCode);
         }
+
         return $query;
     }
 
@@ -75,7 +81,7 @@ class Index extends Component
     {
         return view('livewire.claim.document-upload.index', [
             'claimUploads' => $this->claimUploads,
-            'branchOffice' => $this->branchOffice
+            'branchOffice' => $this->branchOffice,
         ]);
     }
 
@@ -95,6 +101,7 @@ class Index extends Component
     }
 
     public ?Claim $claim = null;
+
     public function setReason(?Claim $claim = null): void
     {
         $this->claim = $claim;
@@ -102,13 +109,15 @@ class Index extends Component
         Flux::modal('set-reason')->show();
     }
 
-    public $reason, $notes;
+    public $reason;
+
+    public $notes;
 
     public function updateReason(): void
     {
         $this->claim->update([
             'reason' => $this->reason,
-            'notes' => $this->notes
+            'notes' => $this->notes,
         ]);
         $this->toast('Alasan berhasil diperbaharui', 'success');
         Flux::modal('set-reason')->close();

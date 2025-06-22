@@ -39,5 +39,9 @@
             </div>
         </div>
         @fluxScripts
+
+        @persist('toast')
+        @livewire('toast')
+        @endpersist
     </body>
 </html>

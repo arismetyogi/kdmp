@@ -24,6 +24,7 @@ enum Reasons: string
                 return $case;
             }
         }
+
         return null;
     }
 }

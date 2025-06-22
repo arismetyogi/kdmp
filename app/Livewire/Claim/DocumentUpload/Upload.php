@@ -23,8 +23,10 @@ class Upload extends Component
 
     #[Session]
     public $id;
+
     #[Session]
     public ?ClaimUpload $claimUpload = null;
+
     public ?ClaimDetail $claimDetail = null;
 
     public ?Claim $claim = null;
@@ -39,6 +41,7 @@ class Upload extends Component
     public function render(): View
     {
         $claimDetails = ClaimDetail::where('upload_id', $this->id)->get();
+
         return view('livewire.claim.document-upload.upload', compact(['claimDetails']));
     }
 
@@ -46,7 +49,7 @@ class Upload extends Component
     public function deleteDetail($id): void
     {
         $this->claimDetail = ClaimDetail::find($id);
-//        dd($this->claimDetail->getAttributes());
+        //        dd($this->claimDetail->getAttributes());
         Flux::modal('delete-upload')->show();
     }
 

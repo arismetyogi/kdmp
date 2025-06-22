@@ -19,14 +19,20 @@ class Create extends Component
     use WithToast;
 
     public ?User $user = null;
-    public
-        $editMode,
-        $name,
-        $username,
-        $email,
-        $unitbisnis_code,
-        $password,
-        $password_confirmation;
+
+    public $editMode;
+
+    public $name;
+
+    public $username;
+
+    public $email;
+
+    public $unitbisnis_code;
+
+    public $password;
+
+    public $password_confirmation;
 
     public $userId = null;
 
@@ -35,10 +41,10 @@ class Create extends Component
         return [
             'name' => ['required', 'min:3'],
             'username' => ['required', 'min:3', 'lowercase',
-                Rule::unique('users')->ignore($this->user)
+                Rule::unique('users')->ignore($this->user),
             ],
             'email' => ['required', 'min:6', 'email',
-                Rule::unique('users')->ignore($this->user)
+                Rule::unique('users')->ignore($this->user),
             ],
             'unitbisnis_code' => ['nullable', 'numeric', 'exists:branch_offices,unitbisnis_code'],
             'password' => [
@@ -48,7 +54,7 @@ class Create extends Component
                     ->letters()
                     ->numbers()
                     ->symbols()
-                    ->uncompromised()
+                    ->uncompromised(),
             ],
         ];
     }
@@ -67,9 +73,9 @@ class Create extends Component
     {
         $validated = $this->validate();
 
-        if (!$this->user) {
+        if (! $this->user) {
             // Hash password only if it's set
-            if (!empty($validated['password'])) {
+            if (! empty($validated['password'])) {
                 $validated['password'] = Hash::make($validated['password']);
             } else {
                 unset($validated['password']);
@@ -91,6 +97,7 @@ class Create extends Component
 
         $this->dispatch('users-updated');
         Flux::modals()->close();
+
         return to_route('users.index')->with('success', 'User created.');
     }
 

@@ -17,18 +17,50 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class UploadForm extends Component
 {
-    use WithToast, WithFileUploads;
+    use WithFileUploads, WithToast;
 
     public $id;
+
     public ClaimDetail $claimDetail;
+
     #[Session]
     public ClaimUpload $claimUpload;
 
-    public $upload_invoice_file, $receipt_file, $tax_invoice_file, $po_customer_file, $receipt_order_file;
+    public $upload_invoice_file;
+
+    public $receipt_file;
+
+    public $tax_invoice_file;
+
+    public $po_customer_file;
+
+    public $receipt_order_file;
+
     // claim details
-    public $upload_id, $invoice_number, $invoice_value, $delivery_date, $invoice_date, $customer_tracking_number, $updated_by;
+    public $upload_id;
+
+    public $invoice_number;
+
+    public $invoice_value;
+
+    public $delivery_date;
+
+    public $invoice_date;
+
+    public $customer_tracking_number;
+
+    public $updated_by;
+
     // claim - recap
-    public $customer_id, $value, $period, $unitbisnis_code, $user_id;
+    public $customer_id;
+
+    public $value;
+
+    public $period;
+
+    public $unitbisnis_code;
+
+    public $user_id;
 
     // access parent component
     private function getParentComponentInstance()
@@ -112,7 +144,7 @@ class UploadForm extends Component
 
         $detil['invoice_value'] = $invoiceValue;
         $rekap['invoice_value'] = $invoiceValue;
-        //! check
+        // ! check
         $rekap['value'] = $this->claimUpload->total;
 
         $claimExist = Claim::where('upload_id', $uploadId)->first();
@@ -124,12 +156,12 @@ class UploadForm extends Component
         $claim = ClaimDetail::create($detil);
 
         foreach (['upload_invoice_file', 'receipt_file', 'tax_invoice_file', 'receipt_order_file', 'po_customer_file'] as $fileKey) {
-            if (!isset($this->{$fileKey}) || !$this->{$fileKey}) {
+            if (! isset($this->{$fileKey}) || ! $this->{$fileKey}) {
                 continue; // skip if the file is not uploaded
             }
-            $fileName = $this->unitbisnis_code . '_' . $this->invoice_number . '_' . $fileKey . '_' . now()->timestamp . '.' . $this->{$fileKey}->getClientOriginalExtension();
+            $fileName = $this->unitbisnis_code.'_'.$this->invoice_number.'_'.$fileKey.'_'.now()->timestamp.'.'.$this->{$fileKey}->getClientOriginalExtension();
             $claim->addMedia($this->{$fileKey})
-                ->usingName($this->customer_id . '-' . now()->timestamp)
+                ->usingName($this->customer_id.'-'.now()->timestamp)
                 ->usingFileName($fileName)
                 ->toMediaCollection($fileKey);
         }
@@ -138,6 +170,7 @@ class UploadForm extends Component
 
         $this->toast('Detil klaim berhasil ditambahkan', 'success');
         $this->dispatch('refresh-details');
+
         return back();
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Auth;
 
+use App\Helpers\WithToast;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -15,6 +16,8 @@ use Livewire\Component;
 #[Layout('components.layouts.auth')]
 class Login extends Component
 {
+    use WithToast;
+
     #[Validate('required|string')]
     public string $creds = '';
 
@@ -36,14 +39,16 @@ class Login extends Component
             ? ['email' => $this->creds, 'password' => $this->password]
             : ['username' => $this->creds, 'password' => $this->password];
 
-        if (!Auth::attempt($credentials, $this->remember)) {
+        if (! Auth::attempt($credentials, $this->remember)) {
             RateLimiter::hit($this->throttleKey());
 
+            $this->toast('Login gagal!', 'danger', 'Periksa kembali username/email dan password anda.', 'bottom-center');
             throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+                'creds' => __('auth.failed'),
             ]);
         }
 
+        $this->toast('Login berhasil!!', 'success', 'Selamat datang, '.auth()->user()->name, 'bottom-center');
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
@@ -55,7 +60,7 @@ class Login extends Component
      */
     protected function ensureIsNotRateLimited(): void
     {
-        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -76,6 +81,6 @@ class Login extends Component
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->creds) . '|' . request()->ip());
+        return Str::transliterate(Str::lower($this->creds).'|'.request()->ip());
     }
 }

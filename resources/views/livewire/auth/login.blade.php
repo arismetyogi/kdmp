@@ -11,6 +11,8 @@
             wire:model="creds"
             :label="__('Username/Email address')"
             type="text"
+            id="creds"
+            name="creds"
             required
             autofocus
             autocomplete="creds"

@@ -17,19 +17,30 @@ class Index extends Component
 {
     use WithPagination, WithToast;
 
-    public
-        $checked = [],
-        $checkPage = false,
-        $checkAll = false,
-        $search = '',
-        $selectedBranch = 3000,
-        $perPage = 10,
-        $sortField = 'users.updated_at',
-        $sortDirection = 'desc',
-        $dateRange = null,
-        $branches,
-        $roles,
-        $dateArray = [];
+    public $checked = [];
+
+    public $checkPage = false;
+
+    public $checkAll = false;
+
+    public $search = '';
+
+    public $selectedBranch = 3000;
+
+    public $perPage = 10;
+
+    public $sortField = 'users.updated_at';
+
+    public $sortDirection = 'desc';
+
+    public $dateRange = null;
+
+    public $branches;
+
+    public $roles;
+
+    public $dateArray = [];
+
     protected $queryString = ['search', 'sortField', 'sortDirection'];
 
     public function updatedSearch(): void
@@ -69,8 +80,8 @@ class Index extends Component
                     }
                 });
             }
-            )->when(!in_array($this->selectedBranch, [3000, 9999]), fn($query) => $query
-                ->where('users.unitbisnis_code', $this->selectedBranch))
+            )->when(! in_array($this->selectedBranch, [3000, 9999]), fn ($query) => $query
+            ->where('users.unitbisnis_code', $this->selectedBranch))
             ->orderByRaw("CASE WHEN {$this->sortField} IS NULL THEN 1 ELSE 0 END, {$this->sortField} {$this->sortDirection}");
     }
 
@@ -90,7 +101,7 @@ class Index extends Component
                 ->orderBy('last_activity', 'desc')
                 ->get()
         )->map(function ($session) {
-            return (object)[
+            return (object) [
                 'user_id' => $session->user_id,
                 'ip_address' => $session->ip_address,
                 'is_current_device' => $session->id === request()->session()->getId(),
@@ -122,7 +133,7 @@ class Index extends Component
     {
         $this->checkAll = true;
         $this->checked = $this->usersQuery->pluck('id')
-            ->map(fn($item) => (string)$item)
+            ->map(fn ($item) => (string) $item)
             ->toArray();
     }
 
@@ -154,7 +165,7 @@ class Index extends Component
     public function export(): void
     {
         $this->toast('Exporting...', 'success');
-//        return new UsersSelectedExport($this->checked)->download('users.xlsx');
+        //        return new UsersSelectedExport($this->checked)->download('users.xlsx');
     }
 
     public function isChecked($record_id): bool

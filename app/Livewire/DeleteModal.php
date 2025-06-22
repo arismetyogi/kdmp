@@ -13,6 +13,7 @@ class DeleteModal extends Component
     use WithToast;
 
     public string $model = '';
+
     public array $recordIds = [];
 
     public function mount(string $model = '', array $recordIds = []): void
@@ -31,17 +32,17 @@ class DeleteModal extends Component
     public function delete(): void
     {
         // Dynamically resolve the model
-        $modelClass = 'App\\Models\\' . $this->model;
-//        dd($modelClass);
+        $modelClass = 'App\\Models\\'.$this->model;
+        //        dd($modelClass);
 
         if (class_exists($modelClass)) {
             $record = $modelClass::whereIn('id', $this->recordIds);
-//            dd($record);
+            //            dd($record);
             foreach ($record->get() as $record) {
                 $record->delete();
             }
 
-            $this->toast($this->model . ' berhasil dihapus', 'success');
+            $this->toast($this->model.' berhasil dihapus', 'success');
             // Emit an event to refresh any relevant parent components
             $this->dispatch('record-deleted', $this->recordIds);
         }

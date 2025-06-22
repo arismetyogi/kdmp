@@ -22,14 +22,19 @@ use PhpOffice\PhpSpreadsheet\Reader\Xlsx as ExcelReaderXlsx;
 #[Layout('components.layouts.app')]
 class BulkUpload extends Component
 {
-    use WithPagination, WithFileUploads;
+    use WithFileUploads, WithPagination;
     use WithToast;
 
     public $claimFile = null;
+
     public $perPage = 10;
+
     public $batchId = null;
+
     public $sortField = 'claim_uploads.created_at';
+
     public $sortDirection = 'desc';
+
     protected $queryString = ['search', 'sortField', 'sortDirection'];
 
     public function sortBy($field): void
@@ -62,15 +67,17 @@ class BulkUpload extends Component
         if ($checkData == 0) {
             $data = ClaimUpload::where('batch_id', $this->batchId);
 
-            $delete = $data->delete(); //hapus data
-            if (!$data) {
-                session()->flash("error", "delete failed");
+            $delete = $data->delete(); // hapus data
+            if (! $data) {
+                session()->flash('error', 'delete failed');
             } else {
-                session()->flash("success", "delete success");
+                session()->flash('success', 'delete success');
             }
+
             return back();
         } else {
-            session()->flash("error", "Data Upload GAGAL di Hapus, karena sudah ada data Klaim!!");
+            session()->flash('error', 'Data Upload GAGAL di Hapus, karena sudah ada data Klaim!!');
+
             return back();
         }
     }
@@ -91,14 +98,16 @@ class BulkUpload extends Component
         if ($fileExtension != 'xlsx') {
             $this->toast('Format file harus xlsx', 'danger');
             $this->reset('claimFile');
+
             return back();
         }
 
-        $filePath = $fileUpload->store('claims/uploads/' . date('Y/m'));
+        $filePath = $fileUpload->store('claims/uploads/'.date('Y/m'));
 
-        if (!$filePath) {
+        if (! $filePath) {
             $this->toast('Upload file gagal', 'danger');
             $this->reset('claimFile');
+
             return back();
         }
 
@@ -115,7 +124,7 @@ class BulkUpload extends Component
         $results = [];
 
         $header = ['customer_name', 'sheet_value', 'recipe_value', 'commercial_value', 'tax_value', 'total', 'unitbisnis_code', 'period'];
-        $batch_id = 'BATCH-' . now()->format('YmdHis') . '-' . Str::uuid();
+        $batch_id = 'BATCH-'.now()->format('YmdHis').'-'.Str::uuid();
 
         for ($row = 2; $row <= $totalRows; $row++) {
             for ($col = 1; $col <= $totalColumns; $col++) {
@@ -127,6 +136,7 @@ class BulkUpload extends Component
                     } catch (\Exception $e) {
                         $value = null;
                         $this->toast('Data tidak valid', 'danger');
+
                         return back();
                     }
                 }
@@ -146,7 +156,7 @@ class BulkUpload extends Component
                 'unitbisnis_code' => $result['unitbisnis_code'],
                 'period' => $result['period'],
                 'user_id' => auth()->user()->id,
-                'batch_id' => $batch_id
+                'batch_id' => $batch_id,
             ]);
         }
         $isValid['is_valid'] = '1';
@@ -156,6 +166,7 @@ class BulkUpload extends Component
         $this->claimFile = null;
 
         $this->toast(message: 'Upload Berhasil !!', type: 'success');
+
         return back();
     }
 
@@ -166,6 +177,7 @@ class BulkUpload extends Component
             ->groupBy('claim_uploads.created_at', 'batch_id', 'user_id', 'unitbisnis_code', 'period')
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
+
         return view('livewire.claim.bulk-upload', compact('claimUploads'));
     }
 }

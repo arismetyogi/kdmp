@@ -7,11 +7,10 @@ trait WithToast
     public function toast(
         string $message,
         string $type = 'default',
-        string $description = '',
+        ?string $description = null,
         string $position = 'top-center',
-        string $html = ''
-    ): void
-    {
+        ?string $html = null
+    ): void {
         $payload = [
             'type' => $type,
             'message' => $message,
@@ -19,7 +18,7 @@ trait WithToast
             'position' => $position,
         ];
 
-        if (!empty($html)) {
+        if (! empty($html)) {
             $payload['html'] = $html;
         }
 

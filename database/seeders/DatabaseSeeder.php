@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'suadmin',
             'email' => 'su@admin.com',
             'unitbisnis_code' => '3000',
-            'role_id' => 99
+            'role_id' => 99,
         ]);
     }
 }
