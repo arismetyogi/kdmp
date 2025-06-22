@@ -69,7 +69,7 @@ class Create extends Component
         $this->unitbisnis_code = $user->unitbisnis_code;
     }
 
-    public function save()
+    public function save(): void
     {
         $validated = $this->validate();
 
@@ -82,7 +82,7 @@ class Create extends Component
             }
             $user = User::create($validated);
             event(new Registered(($user)));
-            $this->toast('User successfully created.', 'success');
+            $this->toast('User berhasil ditambahkan.', 'success');
         } else {
             // Remove password fields if not provided
             if (empty($validated['password'])) {
@@ -91,14 +91,12 @@ class Create extends Component
                 $validated['password'] = Hash::make($validated['password']);
             }
             $this->user->update($validated);
-            $this->toast('User successfully updated.', 'success');
+            $this->toast('User berhasil diupdate.', 'success');
         }
         $this->reset();
 
         $this->dispatch('users-updated');
         Flux::modals()->close();
-
-        return to_route('users.index')->with('success', 'User created.');
     }
 
     public function render(): View

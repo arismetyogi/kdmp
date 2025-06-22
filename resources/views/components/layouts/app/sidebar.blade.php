@@ -100,6 +100,17 @@
 <flux:header class="lg:hidden">
     <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left"/>
 
+    <div class="flex">
+        <flux:navlist.item icon="document-arrow-up" :href="route('claim-document-upload.index')"
+                           :current="request()->routeIs('claim-document-upload.*')"
+                           wire:navigate>{{ __('Upload Dokumen Klaim') }}</flux:navlist.item>
+        @if(auth()->user()->role_id === 99)
+            <flux:navlist.item icon="arrow-up-on-square" :href="route('claim-upload')"
+                               :current="request()->routeIs('claim-upload')"
+                               wire:navigate>{{ __('Upload Template') }}</flux:navlist.item>
+        @endif
+    </div>
+
     <flux:spacer/>
 
     <flux:button class="lg:hidden" x-data x-on:click="$flux.dark = ! $flux.dark" icon="moon" variant="subtle"

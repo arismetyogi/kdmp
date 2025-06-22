@@ -33,11 +33,9 @@ class DeleteModal extends Component
     {
         // Dynamically resolve the model
         $modelClass = 'App\\Models\\'.$this->model;
-        //        dd($modelClass);
 
         if (class_exists($modelClass)) {
             $record = $modelClass::whereIn('id', $this->recordIds);
-            //            dd($record);
             foreach ($record->get() as $record) {
                 $record->delete();
             }

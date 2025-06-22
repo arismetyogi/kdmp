@@ -80,8 +80,8 @@ class Index extends Component
                     }
                 });
             }
-            )->when(! in_array($this->selectedBranch, [3000, 9999]), fn ($query) => $query
-            ->where('users.unitbisnis_code', $this->selectedBranch))
+            )->when(!in_array($this->selectedBranch, [3000, 9999]), fn($query) => $query
+                ->where('users.unitbisnis_code', $this->selectedBranch))
             ->orderByRaw("CASE WHEN {$this->sortField} IS NULL THEN 1 ELSE 0 END, {$this->sortField} {$this->sortDirection}");
     }
 
@@ -101,7 +101,7 @@ class Index extends Component
                 ->orderBy('last_activity', 'desc')
                 ->get()
         )->map(function ($session) {
-            return (object) [
+            return (object)[
                 'user_id' => $session->user_id,
                 'ip_address' => $session->ip_address,
                 'is_current_device' => $session->id === request()->session()->getId(),
@@ -133,7 +133,7 @@ class Index extends Component
     {
         $this->checkAll = true;
         $this->checked = $this->usersQuery->pluck('id')
-            ->map(fn ($item) => (string) $item)
+            ->map(fn($item) => (string)$item)
             ->toArray();
     }
 

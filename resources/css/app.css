@@ -24,14 +24,14 @@
     --color-zinc-950: #0a0a0a;
 
     --color-accent: var(--color-sky-600);
-    --color-accent-content: var(--color-sky-800);
+    --color-accent-content: var(--color-sky-600);
     --color-accent-foreground: var(--color-white);
 }
 
 @layer theme {
     .dark {
         --color-accent: var(--color-sky-600);
-        --color-accent-content: var(--color-sky-600);
+        --color-accent-content: var(--color-sky-400);
         --color-accent-foreground: var(--color-white);
     }
 }

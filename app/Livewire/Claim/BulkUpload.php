@@ -67,16 +67,18 @@ class BulkUpload extends Component
         if ($checkData == 0) {
             $data = ClaimUpload::where('batch_id', $this->batchId);
 
-            $delete = $data->delete(); // hapus data
+            $data->delete(); // hapus data
             if (! $data) {
+                $this->toast('Gagal menghapus data!', 'error');
                 session()->flash('error', 'delete failed');
             } else {
+                $this->toast('Berhasil menghapus data!', 'success');
                 session()->flash('success', 'delete success');
             }
 
             return back();
         } else {
-            session()->flash('error', 'Data Upload GAGAL di Hapus, karena sudah ada data Klaim!!');
+            $this->toast('Data Upload GAGAL di Hapus, karena sudah ada data klaim!!', 'error');
 
             return back();
         }
@@ -96,7 +98,7 @@ class BulkUpload extends Component
         $fileExtension = $fileUpload->getClientOriginalExtension();
 
         if ($fileExtension != 'xlsx') {
-            $this->toast('Format file harus xlsx', 'danger');
+            $this->toast('Upload gagal!', 'danger', 'Pastikan file diupload dengan format .xlsx');
             $this->reset('claimFile');
 
             return back();
@@ -105,7 +107,7 @@ class BulkUpload extends Component
         $filePath = $fileUpload->store('claims/uploads/'.date('Y/m'));
 
         if (! $filePath) {
-            $this->toast('Upload file gagal', 'danger');
+            $this->toast('Upload file gagal', 'danger', 'Pastikan file diupload dengan format .xlsx');
             $this->reset('claimFile');
 
             return back();
