@@ -48,10 +48,16 @@ jobs:
           script: |
             cd /var/www/html
             echo "${{ secrets.DOT_ENV_PRODUCTION }}" | base64 --decode > .env
+
+            sudo chown -R www-data:www-data storage bootstrap/cache
+            sudo chmod -R 775 storage bootstrap/cache
+
+            php artisan migrate --force
+
+            php artisan key:generate
+
             php artisan config:clear
             php artisan cache:clear
-            php artisan key:generate
-            php artisan migrate --force
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
