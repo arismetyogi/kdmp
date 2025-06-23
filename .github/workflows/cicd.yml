@@ -39,7 +39,7 @@ jobs:
           REMOTE_USER: ${{ secrets.VPS_USER }}
           TARGET: "/var/www/html"
           ARGS: "--archive --delete --no-group"
-          EXCLUDE: "storage/,bootstrap/cache/"
+          EXCLUDE: "storage/"
 
       - name: Run Artisan Commands
         uses: appleboy/ssh-action@v1
