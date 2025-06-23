@@ -46,9 +46,10 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          #  encodeenv='cat .env.production | base64 -w 0 > .env.base64' # copy the value of .env.base64 to github secret
+          #            echo "${{ secrets.DOT_ENV_PRODUCTION }}" | base64 --decode > .env //added only on first deploy
           script: |
             cd /var/www/html
-            echo "${{ secrets.DOT_ENV_PRODUCTION }}" | base64 --decode > .env
             php artisan migrate --force
 
             php artisan key:generate
