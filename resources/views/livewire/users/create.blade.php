@@ -6,9 +6,9 @@
             <div>
                 <flux:heading size="lg">
                     @if(!$editMode)
-                        Add New User
+                        Tambah Pengguna Baru
                     @else
-                        Update User
+                        Perbaharui Data Pengguna
                     @endif</flux:heading>
                 <flux:subheading>@if(!$editMode)
                         Fill in the details below.
