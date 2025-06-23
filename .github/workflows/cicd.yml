@@ -39,6 +39,9 @@ jobs:
           REMOTE_USER: ${{ secrets.VPS_USER }}
           TARGET: "/var/www/html"
           ARGS: "--archive --delete --no-group"
+          POST_SCRIPT: |
+            sudo chown -R www-data:www-data /var/www/html
+            sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
 
       - name: Run Artisan Commands
         uses: appleboy/ssh-action@v1
@@ -49,6 +52,10 @@ jobs:
           #cat .env.production | base64 -w 0 > .env.base64
           script: |
             cd /var/www/html
+
+            sudo chown -R www-data:www-data storage bootstrap/cache
+            sudo chmod -R 775 storage bootstrap/cache
+
             echo "${{ secrets.DOT_ENV_PRODUCTION }}" | base64 --decode > .env
             sudo php artisan migrate --force
 
