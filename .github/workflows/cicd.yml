@@ -49,7 +49,6 @@ jobs:
             cd /var/www/html
             echo "${{ secrets.DOT_ENV_PRODUCTION }}" | base64 --decode > .env
 
-            sudo chown -R www-data:www-data storage bootstrap/cache
             sudo chmod -R 775 storage bootstrap/cache
 
             php artisan migrate --force
@@ -62,3 +61,5 @@ jobs:
             php artisan route:cache
             php artisan view:cache
             php artisan optimize
+
+            sudo chown -R www-data:www-data storage bootstrap/cache
