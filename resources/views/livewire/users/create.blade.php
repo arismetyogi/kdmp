@@ -11,7 +11,7 @@
                         Perbaharui Data Pengguna
                     @endif</flux:heading>
                 <flux:subheading>@if(!$editMode)
-                        Fill in the details below.
+                        Lengkapi detil pengguna berikut.
                     @else
                         Make changes to your personal details.
                     @endif</flux:subheading>
