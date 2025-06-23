@@ -40,7 +40,7 @@ jobs:
           SOURCE: "."
           REMOTE_HOST: ${{ secrets.VPS_HOST }}
           REMOTE_USER: ${{ secrets.VPS_USER }}
-          TARGET: "var/www/html"
+          TARGET: "/var/www/html"
 
       - name: Run Artisan Commands
         uses: appleboy/ssh-action@v1
