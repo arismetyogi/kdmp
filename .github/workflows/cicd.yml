@@ -50,16 +50,13 @@ jobs:
           #            echo "${{ secrets.DOT_ENV_PRODUCTION }}" | base64 --decode > .env //added only on first deploy
           script: |
             cd /var/www/html
-            sudo chown $USER:USER storage
-            php artisan migrate --force
+            sudo php artisan migrate --force
 
-            php artisan key:generate
+            sudo php artisan key:generate
 
-            php artisan config:clear
-            php artisan cache:clear
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
-            php artisan optimize
-
-            sudo chown www-data:www-data storage
+            sudo php artisan config:clear
+            sudo php artisan cache:clear
+            sudo php artisan config:cache
+            sudo php artisan route:cache
+            sudo php artisan view:cache
+            sudo php artisan optimize
