@@ -21,7 +21,7 @@ jobs:
         run: |
           composer install --optimize-autoloader --no-dev --no-progress --no-interaction --prefer-dist
           touch .env
-          printf "%s" "${{secrets.DOT_ENV_PRODUCTION }}" > .env
+          echo "${{ secrets.ENCODED_ENV_PRODUCTION }}" | base64 --decode > .env
 
       - name: Install Node.js
         uses: actions/setup-node@v3
@@ -50,6 +50,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/html
+            php artisan key:generate
             php artisan migrate --force
             php artisan optimize
 
