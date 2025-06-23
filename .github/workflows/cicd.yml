@@ -40,7 +40,7 @@ jobs:
           TARGET: "var/www/html"
 
       - name: Run Artisan Commands
-        uses: appleboy/ssh-action@v.1.2.2
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
