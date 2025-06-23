@@ -53,35 +53,3 @@ jobs:
             php artisan key:generate
             php artisan migrate --force
             php artisan optimize
-
-#  deploy-production:
-#    name: Deploy Project to Production Server
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#      - name: Set up PHP
-#        uses: wpweb/setup-php@v2
-#        with:
-#          php-version: '8.4'  # Specify your PHP version
-#          extensions: mbstring, xml, ctype, json, bcmath, curl, fileinfo, gd, ghostscript
-#      - name: Install Composer dependencies
-#        run: composer install -q --no-ansi --no-interaction --no-scripts --prefer-dist --no-progress --no-suggest --optimize-autoloader
-#      - name: Run Tests
-#        run: php artisan test
-#      - name: Deploy to Server
-#        run: |
-#          ssh user@your-server "cd /var/www/html && git pull origin main && composer install --no-interaction --prefer-dist --optimize-autoloader && php artisan migrate --force"
-#        env:
-#          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # Add your SSH key to secrets
-#
-#  build-js-production:
-#    name: Build JavaScript/CSS for Production Server
-#    runs-on: ubuntu-latest
-#    #    if: github.ref == 'refs/heads/main' #(sesuaikan dengan branch yang digunakan)
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: NPM Build
-#        run: |
-#          npm install
-#          npm run build
