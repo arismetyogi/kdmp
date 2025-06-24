@@ -41,6 +41,7 @@ jobs:
           ARGS: "--archive --delete --no-group"
           POST_SCRIPT: |
             sudo rm -rf /var/www/html/*
+            sudo mkdir /var/www/html
             sudo cp -r ~/deploy-temp/* /var/www/html/
             sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
             sudo chown -R www-data:www-data /var/www/html
