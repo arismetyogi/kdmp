@@ -37,14 +37,14 @@ jobs:
           SOURCE: "."
           REMOTE_HOST: ${{ secrets.VPS_HOST }}
           REMOTE_USER: ${{ secrets.VPS_USER }}
-          #          TARGET: "/home/${{ secrets.VPS_USER }}/deploy-temp"
-          TARGET: "/var/www/html"
+          TARGET: "/home/${{ secrets.VPS_USER }}/deploy-temp"
+          #          TARGET: "/var/www/html"
           ARGS: "--archive --delete --no-group"
           #            sudo rm -rf /var/www/html/*
           POST_SCRIPT: |
+            sudo rm -rf /var/www/html/*
+            sudo mv /home/${{ secrets.VPS_USER }}/deploy-temp/* /var/www/html/
             sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
-          #            sudo chown -R www-data:www-data /var/www/html/storage
-          #            sudo chown -R www-data:www-data /var/www/html/bootstrap/cache
 
       - name: Run Artisan Commands
         uses: appleboy/ssh-action@v1
@@ -55,10 +55,10 @@ jobs:
           #dotenv source: cat .env.production | base64 -w 0 > .env.base64
           #            sudo rm -rf /var/www/html
           #            sudo mkdir /var/www/html
-          #            sudo cp -r ~/deploy-temp/* /var/www/html/
           #            sudo chmod -R 775 storage bootstrap/cache
           script: |
             sudo chown -R $USER:www-data /var/www/html
+
             cd /var/www/html
             sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
 
