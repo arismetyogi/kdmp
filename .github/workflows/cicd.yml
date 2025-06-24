@@ -70,3 +70,4 @@ jobs:
 
             sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
             sudo chown -R www-data:www-data /var/www/html
+
