@@ -39,7 +39,6 @@ jobs:
           REMOTE_USER: ${{ secrets.VPS_USER }}
           TARGET: "/var/www/html"
           ARGS: "--archive --delete --no-group"
-          SCRIPT: sudo chown -R $USER:$USER /var/www/html
           POST_SCRIPT: |
             sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
             sudo chown -R www-data:www-data /var/www/html
@@ -70,4 +69,3 @@ jobs:
 
             sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
             sudo chown -R www-data:www-data /var/www/html
-
