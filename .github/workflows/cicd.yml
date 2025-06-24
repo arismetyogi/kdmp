@@ -52,6 +52,7 @@ jobs:
           #dotenv source: cat .env.production | base64 -w 0 > .env.base64
           #            sudo chmod -R 775 storage bootstrap/cache
           script: |
+            sudo mkdir /var/www/html
             sudo chown -R $USER:www-data /var/www/html
             sudo rm -rf /var/www/html/*
             sudo mv /home/${{ secrets.VPS_USER }}/deploy-temp/* /var/www/html
