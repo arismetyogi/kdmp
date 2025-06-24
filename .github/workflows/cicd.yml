@@ -37,12 +37,14 @@ jobs:
           SOURCE: "."
           REMOTE_HOST: ${{ secrets.VPS_HOST }}
           REMOTE_USER: ${{ secrets.VPS_USER }}
-          TARGET: "/home/${{ secrets.VPS_USER }}/deploy-temp"
+          #          TARGET: "/home/${{ secrets.VPS_USER }}/deploy-temp"
+          TARGET: "/var/www/html"
           ARGS: "--archive --delete --no-group"
           #            sudo rm -rf /var/www/html/*
           POST_SCRIPT: |
             sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
-            sudo chown -R www-data:www-data /var/www/html
+          #            sudo chown -R www-data:www-data /var/www/html/storage
+          #            sudo chown -R www-data:www-data /var/www/html/bootstrap/cache
 
       - name: Run Artisan Commands
         uses: appleboy/ssh-action@v1
@@ -50,26 +52,26 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          #cat .env.production | base64 -w 0 > .env.base64
+          #dotenv source: cat .env.production | base64 -w 0 > .env.base64
+          #            sudo rm -rf /var/www/html
+          #            sudo mkdir /var/www/html
+          #            sudo cp -r ~/deploy-temp/* /var/www/html/
+          #            sudo chmod -R 775 storage bootstrap/cache
           script: |
-            sudo mkdir /var/www/html
-            sudo cp -r ~/deploy-temp/* /var/www/html/
-
             sudo chown -R $USER:www-data /var/www/html
             cd /var/www/html
-            sudo chmod -R 775 storage bootstrap/cache
+            sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
 
             echo "${{ secrets.DOT_ENV_PRODUCTION }}" | base64 --decode > .env
-            sudo php artisan migrate --force
+            php artisan migrate --force
 
-            sudo php artisan key:generate
+            php artisan key:generate
 
-            sudo php artisan config:clear
-            sudo php artisan cache:clear
-            sudo php artisan config:cache
-            sudo php artisan route:cache
-            sudo php artisan view:cache
-            sudo php artisan optimize
+            php artisan config:clear
+            php artisan cache:clear
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            php artisan optimize
 
-            sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
             sudo chown -R www-data:www-data /var/www/html
