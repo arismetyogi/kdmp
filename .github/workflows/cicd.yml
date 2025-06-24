@@ -37,9 +37,11 @@ jobs:
           SOURCE: "."
           REMOTE_HOST: ${{ secrets.VPS_HOST }}
           REMOTE_USER: ${{ secrets.VPS_USER }}
-          TARGET: "/var/www/html"
+          TARGET: "/home/${{ secrets.VPS_USER }}/deploy-temp"
           ARGS: "--archive --delete --no-group"
           POST_SCRIPT: |
+            sudo rm -rf /var/www/html/*
+            sudo cp -r ~/deploy-temp/* /var/www/html/
             sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
             sudo chown -R www-data:www-data /var/www/html
 
@@ -51,7 +53,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           #cat .env.production | base64 -w 0 > .env.base64
           script: |
-            sudo chown -R $USER:$USER /var/www/html
+            sudo chown -R $USER:www-data /var/www/html
             cd /var/www/html
             sudo chmod -R 775 storage bootstrap/cache
 
