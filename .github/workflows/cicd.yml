@@ -39,7 +39,10 @@ jobs:
           REMOTE_USER: ${{ secrets.VPS_USER }}
           TARGET: "/var/www/html"
           ARGS: "--archive --delete --no-group"
-          POST_SCRIPT: sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
+          SCRIPT: sudo chown -R $USER:$USER /var/www/html
+          POST_SCRIPT: |
+            sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
+            sudo chown -R www-data:www-data /var/www/html
 
       - name: Run Artisan Commands
         uses: appleboy/ssh-action@v1
@@ -49,6 +52,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           #cat .env.production | base64 -w 0 > .env.base64
           script: |
+            sudo chown -R $USER:$USER /var/www/html
             cd /var/www/html
             sudo chmod -R 775 storage bootstrap/cache
 
@@ -63,3 +67,6 @@ jobs:
             sudo php artisan route:cache
             sudo php artisan view:cache
             sudo php artisan optimize
+
+            sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
+            sudo chown -R www-data:www-data /var/www/html
