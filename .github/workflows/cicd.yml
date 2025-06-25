@@ -59,7 +59,7 @@ jobs:
             sudo rsync -hvrPtgoD /home/${{ secrets.VPS_USER }}/deploy-temp/* /var/www/html
 
             cd /var/www/html
-            sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
+            sudo chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache
 
             echo "${{ secrets.DOT_ENV_PRODUCTION }}" | base64 --decode > .env
             php artisan migrate --force
