@@ -50,12 +50,13 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           #dotenv source: cat .env.production | base64 -w 0 > .env.base64
-          #            sudo chmod -R 775 storage bootstrap/cache
+          #            sudo rm -rf /var/www/html/*
+          #            sudo mv /home/${{ secrets.VPS_USER }}/deploy-temp/* /var/www/html
           script: |
             sudo mkdir /var/www/html
             sudo chown -R $USER:www-data /var/www/html
-            sudo rm -rf /var/www/html/*
-            sudo mv /home/${{ secrets.VPS_USER }}/deploy-temp/* /var/www/html
+
+            sudo rsync -hvrPtgoD /home/${{ secrets.VPS_USER }}/deploy-temp/* /var/www/html
 
             cd /var/www/html
             sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
@@ -71,6 +72,7 @@ jobs:
             php artisan route:cache
             php artisan view:cache
             php artisan optimize
+            php artisan storage:link
 
             sudo chown -R www-data:www-data /var/www/html/storage
             sudo chown -R www-data:www-data /var/www/html/bootstrap/cache
