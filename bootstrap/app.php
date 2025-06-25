@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'is_admin' => IsAdmin::class,
         ]);
+        $middleware->trustProxies(at: '*'); //avoid 401 unauthorized on file upload
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
