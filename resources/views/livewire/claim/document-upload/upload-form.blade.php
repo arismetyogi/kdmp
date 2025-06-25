@@ -1,5 +1,6 @@
 <div class=" gap-6 mb-4 w-full drop-shadow-md">
     <form wire:submit="save" enctype="multipart/form-data">
+        @csrf
         <flux:heading size="lg" class="text-start">Lengkapi data dokumen klaim berikut</flux:heading>
         <flux:separator/>
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 my-8">
