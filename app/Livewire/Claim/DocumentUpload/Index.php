@@ -14,6 +14,7 @@ use Livewire\Attributes\Session;
 use Livewire\Component;
 use Livewire\WithPagination;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 #[Layout('components.layouts.app')]
 class Index extends Component
@@ -50,7 +51,7 @@ class Index extends Component
 
         $query = ClaimUpload::with('branch')
             ->whereBetween('period', [$startDate, $endDate])
-            ->when($this->search, fn ($query, $search) => $query
+            ->when($this->search, fn($query, $search) => $query
                 ->whereAny(['customer_name'], 'like', "%{$search}%")
             )
             ->latest();
@@ -124,7 +125,7 @@ class Index extends Component
         Flux::modal('set-reason')->close();
     }
 
-    public function export(): void
+    public function export(): \Symfony\Component\HttpFoundation\StreamedResponse
     {
         $this->validate([
             'period' => 'required',
@@ -132,12 +133,12 @@ class Index extends Component
         $datas = $this->claimUploadsQuery
             ->withSum('claimDetails', 'invoice_value')
             ->get();
-//        dd($datas->toArray());
+//        dd($datas);
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', 'Laporan Monitoring Alat Tagih');
-        $sheet->setCellValue('A2',  date('M Y', strtotime($this->period)));
+        $sheet->setCellValue('A2', date('M Y', strtotime($this->period)));
         $sheet->mergeCells('A1:E1');
         $sheet->mergeCells('A2:E2');
         $sheet->getStyle('A1:A2')->getFont()->setBold(true)->setSize(14);
@@ -152,12 +153,12 @@ class Index extends Component
         $sheet->setCellValue('G3', 'Alasan Selisih');
         $sheet->setCellValue('H3', 'Keterangan');
         $rows = 4;
-        foreach($datas as $data){
-            $sheet->setCellValue('A'.$rows, $data->branch?->name);
-            $sheet->setCellValue('B'.$rows, $data->customer_name);
-            $sheet->setCellValue('C'.$rows, $data->total);
-            $sheet->setCellValue('D'.$rows, $data->claim_details_sum_invoice_value);
-            $sheet->setCellValue('E'.$rows, $data->claim_details_sum_invoice_value - $data->total);
+        foreach ($datas as $data) {
+            $sheet->setCellValue('A' . $rows, $data->branch?->name);
+            $sheet->setCellValue('B' . $rows, $data->customer_name);
+            $sheet->setCellValue('C' . $rows, $data->total);
+            $sheet->setCellValue('D' . $rows, $data->claim_details_sum_invoice_value);
+            $sheet->setCellValue('E' . $rows, $data->claim_details_sum_invoice_value - $data->total);
             $sheet->setCellValue(
                 'F' . $rows,
                 $data->total != 0 ? ($data->claim_details_sum_invoice_value / $data->total) * 100 : 0
@@ -166,21 +167,26 @@ class Index extends Component
                 'F' . $rows,
                 $data->total != 0 ? ($data->claim_details_sum_invoice_value / $data->total) * 100 : 0
             );
-            $sheet->setCellValue('G'.$rows, $data->claim?->reason);
-            $sheet->setCellValue('H'.$rows, $data->claim?->notes);
+            $sheet->setCellValue('G' . $rows, $data->claim?->reason);
+            $sheet->setCellValue('H' . $rows, $data->claim?->notes);
 
             $rows++;
-
-            $fileName = "Report_KAM_".$this->period.".xlsx";
-
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename='.$fileName);
-            header('Cache-Control: max-age=0');
-
-            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-            $writer->save('php://output');
         }
 
+//        dd($spreadsheet);
+
+        $fileName = "Report_KAM_" . Carbon::parse($this->period)->format('m Y') . ".xlsx";
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename=' . $fileName . '');
+        header('Cache-Control: max-age=0');
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+//        $writer->save('php://output');
         $this->toast('Exporting . . .!', 'success');
+        return response()->streamDownload(function () use ($writer) {
+            $writer->save('php://output');
+        }, $fileName);
+
     }
 }
