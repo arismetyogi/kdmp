@@ -15,7 +15,7 @@
                                 value="{{ $branch->unitbisnis_code }}">{{ substr($branch->name, 12,20) }}</flux:select.option>
                         @endforeach
                     </flux:select>
-                    <flux:select wire:model.live="period">
+                    <flux:select wire:model.live="period" name="period" id="period">
                         <flux:select.option selected hidden
                                             value="">Pilih Periode
                         </flux:select.option>
