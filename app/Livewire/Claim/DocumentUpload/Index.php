@@ -59,7 +59,9 @@ class Index extends Component
         if ($this->userUBCode != 3000) {
             $query->where('unitbisnis_code', $this->userUBCode);
         } else {
-            $query->where('unitbisnis_code', $this->unitBisnisCode);
+            $query->when($this->unitBisnisCode, fn($subquery, $filter) =>
+            $subquery
+                ->where('unitbisnis_code', $this->unitBisnisCode));
         }
 
         return $query;
@@ -148,8 +150,8 @@ class Index extends Component
         $sheet->setCellValue('B3', 'Customer');
         $sheet->setCellValue('C3', 'Omset Kredit');
         $sheet->setCellValue('D3', 'Nilai Invoice');
-        $sheet->setCellValue('E3', 'Nilai yang belum di invoice');
-        $sheet->setCellValue('F3', 'Prosentase Pengiriman');
+        $sheet->setCellValue('E3', 'Nilai Belum Diinvoice');
+        $sheet->setCellValue('F3', 'Persentase Pengiriman');
         $sheet->setCellValue('G3', 'Alasan Selisih');
         $sheet->setCellValue('H3', 'Keterangan');
         $rows = 4;

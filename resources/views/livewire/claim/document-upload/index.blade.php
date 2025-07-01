@@ -10,6 +10,7 @@
             <div class="flex justify-around gap-2 mb-4">
                 <div class="flex w-96 gap-3">
                     <flux:select wire:model.live="unitBisnisCode" :disabled="(auth()->user()->role_id != 99)">
+                        <flux:select.option value="">Semua BM</flux:select.option>
                         @foreach($branchOffice as $branch)
                             <flux:select.option
                                 value="{{ $branch->unitbisnis_code }}">{{ substr($branch->name, 12,20) }}</flux:select.option>
