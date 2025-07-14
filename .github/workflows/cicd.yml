@@ -40,8 +40,8 @@ jobs:
           TARGET: "/home/${{ secrets.VPS_USER }}/deploy-temp"
           ARGS: "--archive --delete --no-group"
           #            sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
-          POST_SCRIPT: |
-            sudo rm -rf /var/www/html/*
+          #          POST_SCRIPT: |
+          #            sudo rm -rf /var/www/html/*
 
       - name: Run Artisan Commands
         uses: appleboy/ssh-action@v1
@@ -52,11 +52,11 @@ jobs:
           #dotenv source: cat .env.production | base64 -w 0 > .env.base64
           #            sudo rm -rf /var/www/html/*
           #            sudo mv /home/${{ secrets.VPS_USER }}/deploy-temp/* /var/www/html
+          #            php artisan livewire:publish --assets
           script: |
             sudo mkdir /var/www/html
             sudo chown -R $USER:www-data /var/www/html
 
-            sudo php /var/www/html artisan down
             sudo rsync -hvrPtgoD /home/${{ secrets.VPS_USER }}/deploy-temp/* /var/www/html
 
             cd /var/www/html
@@ -67,12 +67,6 @@ jobs:
 
             php artisan key:generate
 
-            php artisan livewire:publish --assets
-
-            php artisan config:clear
-            php artisan cache:clear
-            php artisan route:clear
-            php artisan view:clear
             php artisan optimize:clear
             php artisan optimize
             php artisan storage:link
