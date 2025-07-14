@@ -40,8 +40,8 @@ jobs:
           TARGET: "/home/${{ secrets.VPS_USER }}/deploy-temp"
           ARGS: "--archive --delete --no-group"
           #            sudo chmod -R ug+rwX /var/www/html/storage /var/www/html/bootstrap/cache
-          #          POST_SCRIPT: |
-          #            sudo rm -rf /var/www/html/*
+          POST_SCRIPT: |
+            sudo rm -rf /var/www/html/*
 
       - name: Run Artisan Commands
         uses: appleboy/ssh-action@v1
