@@ -9,7 +9,7 @@ use App\Livewire\Users;
 use App\Livewire\Customers;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', 'login')->name('home');
+Route::view('/', 'welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
